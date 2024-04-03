@@ -26,7 +26,7 @@ export default MessageInput
 
 // STARTER CODE
 
-import { BsSend } from 'react-icons/bs'
+// import { BsSend } from 'react-icons/bs'
 // function MessageInput() {
 //         return (
 //             <form className="px-4 my-3">
