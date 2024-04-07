@@ -12,3 +12,26 @@ body {
 * {
     scrollbar-width: thin;
 }
+
+/* Scrollbar size */
+::-webkit-scrollbar,
+::-webkit-scrollbar-thumb {
+    width: 8px;
+    height: 8px;
+}
+
+/* Scrollbar track */
+::-webkit-scrollbar-track {
+    background: #555;
+}
+
+/* Scrollbar thumb */
+::-webkit-scrollbar-thumb {
+    background: #121212;
+    border-radius: 5px;
+}
+
+/* Scrollbar thumb on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #242424;
+}

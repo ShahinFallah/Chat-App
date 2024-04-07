@@ -1,12 +1,22 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import Conversation from './Conversation'
+import useGetConversations from '../../hooks/useGetConversations'
+import { getRandomEmp } from '../../utils/emojis'
 
 function Conversations() {
+    const { loading, conversations } = useGetConversations()
+
     return (
         <div className='py-2 flex flex-col overflow-auto'>
-            <Conversation />
-            <Conversation />
-            <Conversation />
+            {conversations.map((conversation, index) => (
+                <Conversation
+                    key={conversation._id}
+                    conversation={conversation}
+                    emoji={getRandomEmp()}
+                    lastIndex={index == conversations.length - 1}
+                />
+            ))}
+            {loading ? <span className='loading loading-spinner mx-auto'></span> : null}
         </div>
     )
 }
