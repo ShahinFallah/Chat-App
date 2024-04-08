@@ -1,15 +1,18 @@
 import { useEffect, useRef } from "react"
 import useConversation from "../../zustand/useConversation"
+import { useSocketContext } from "../../context/SocketContext"
 
 function Conversation({ conversation, emoji, lastIndex }) {
   const { selectedConversation, setSelectedConversation } = useConversation()
+  const { onlineUsers } = useSocketContext()
 
   const isSelected = selectedConversation?._id === conversation._id
+  const isOnline = onlineUsers.includes(conversation._id)
+  
 
   const conversationRef = useRef()
 
   useEffect(() => {
-    console.log(123)
     if (!conversationRef.current) return;
 
     setTimeout(() => {
@@ -23,7 +26,7 @@ function Conversation({ conversation, emoji, lastIndex }) {
         onClick={() => setSelectedConversation(conversation)}
         ref={isSelected ? conversationRef : null}
       >
-        <div className='avatar online'>
+        <div className={`avatar ${isOnline ? "online" : ""}`}>
           <div className='w-12 rounded-full'>
             <img src={conversation.profilePic} alt="user avatar" />
           </div>

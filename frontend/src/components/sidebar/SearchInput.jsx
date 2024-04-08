@@ -11,7 +11,6 @@ function SearchInput() {
 
     const handleSubmit = e => {
         e.preventDefault()
-        console.log(1123)
         if (!search) return;
 
         if (search.length < 3) {
