@@ -1,39 +1,14 @@
-import Conversations from "./Conversations"
-import LogoutButton from "./LogoutButton"
 import SearchInput from "./SearchInput"
+import Conversations from "./conversation/Conversations"
 
 function Sidebar() {
   return (
-    <div className="border-r border-slate-500 p-4 flex flex-col">
-        <SearchInput />
-        <div className="divider px-2"></div>
-        <Conversations />
-        <LogoutButton />
+    <div className="flex flex-col w-80 border border-primary_200 p-4 bg-background rounded-xl bg-opacity-20">
+      <h1 className="font-bold mb-1.5 ml-1 text-xl">ChatApp</h1>
+      <SearchInput />
+      <Conversations />
     </div>
   )
 }
 
 export default Sidebar
-
-
-
-
-
-// STARTER CODE
-
-// import Conversations from "./Conversations"
-// import LogoutButton from "./LogoutButton"
-// import SearchInput from "./SearchInput"
-
-// function Sidebar() {
-//   return (
-//     <div className="border-r border-slate-500 p-4 flex flex-col">
-//         <SearchInput />
-//         <div className="divider px-2"></div>
-//         <Conversations />
-//         <LogoutButton />
-//     </div>
-//   )
-// }
-
-// export default Sidebar

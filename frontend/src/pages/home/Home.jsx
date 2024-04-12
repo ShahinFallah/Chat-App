@@ -1,13 +1,12 @@
-import React from 'react'
-import Sidebar from '../../components/sidebar/Sidebar'
-import MessageContainer from '../../components/messages/MessageContainer'
+import Sidebar from "../../components/sidebar/Sidebar"
+import MessagesContainer from '../../components/messages/MessagesContainer'
+
 
 function Home() {
   return (
-    <div className='flex sm:h-[450px] md:h-[580px] rounded-lg overflow-hidden
-    bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0'>
+    <div className="flex w-[1230px] h-[750px] home-bg-color rounded-lg p-7 border border-primary_200">
       <Sidebar />
-      <MessageContainer />
+      <MessagesContainer />
     </div>
   )
 }
