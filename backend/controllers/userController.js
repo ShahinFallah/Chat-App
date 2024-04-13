@@ -165,9 +165,9 @@ const searchUser = async (req, res) => {
 
         const users = await User.find({ username: { $regex: query, $options: 'i' } }).select('username');
 
-        const matchingUsernames = users.map(user => [user._id, user.username]);
+        // const matchingUsernames = users.map(user => [user._id, user.username]);
 
-        res.status(200).json({matchingUsernames});
+        res.status(200).json(users);
 
     } catch (error) {
 
