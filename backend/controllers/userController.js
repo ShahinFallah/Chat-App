@@ -167,7 +167,7 @@ const searchUser = async (req, res) => {
 
         const matchingUsernames = users.map(user => [user._id, user.username]);
 
-        res.status(200).json(matchingUsernames);
+        res.status(200).json({matchingUsernames});
 
     } catch (error) {
 
