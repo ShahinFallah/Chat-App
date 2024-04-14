@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import User from '../models/userModel.js';
+import Conversation from '../models/conversationModel.js';
 import generateTokenAndSetCookie from '../utils/generateToken.js';
 
 
@@ -81,22 +82,41 @@ const logout = async (req, res) => {
 
 }
 
-// const getLoggedInUsers = async (req, res) => {
+const getUserConversations = async (req, res) => {
+    try {
+        const loggedInUserId = req.user._id;
 
-//     try {
-//         const loggedInUser = req.user._id;
+        const users = await User.aggregate([
+            
+            { $match: { _id: loggedInUserId } },
+            { $unwind: "$conversations" },
+            { $lookup: {
+                from: "users",
+                localField: "conversations",
+                foreignField: "_id",
+                as: "conversationUsers"
+            }},
+            { $unwind: "$conversationUsers" },
+            { $project: { 
+                _id: "$conversationUsers._id",
+                fullName: "$conversationUsers.fullName",
+                username: "$conversationUsers.username",
+                profilePic: "$conversationUsers.profilePic",
+                bio: "$conversationUsers.bio"
+            }}
+        ]);
 
-//         const filteredUsers = await User.find({_id : {$ne : loggedInUser}}).select('-password');
+        res.status(200).json(users);
 
-//         res.status(200).json(filteredUsers);
-
-//     } catch (error) {
+    } catch (error) {
         
-//         console.log('error in getUsers controller', error.message);
-//         res.status(500).json({error : 'internal server error'});
-//     }
+        console.log('Error in getUserConversations controller', error.message);
 
-// }
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+
 
 const getProfile = async (req, res) => {
 
@@ -185,7 +205,7 @@ const blockUser = async (req, res) => {
         const userToModify = await User.findById(id);
         const currentUser = await User.findById(req.user._id);
 
-        if(id === req.user._id.toString()) return res.status(400).json({error : 'You can block or unBlock yourself'});
+        if(id === req.user._id.toString()) return res.status(400).json({error : 'You cannot block or unBlock yourself'});
 
         const isBlock = currentUser.blockedUsers.includes(id);
 
@@ -209,6 +229,42 @@ const blockUser = async (req, res) => {
 
 }
 
+const AddConversation = async (req, res) => {
+
+    try {
+        const userToModify = await User.findById(req.params.id);
+        const currentUser = await User.findById(req.user._id);
+        
+        if(userToModify === currentUser.toString()) return res.status({error : 'you cannot start conversation with yourself'});
+
+        const isHaveConversation = currentUser.conversations.includes(userToModify._id);
+
+        if(!isHaveConversation) {
+
+            await User.findByIdAndUpdate(req.user._id, {$push : {conversations : userToModify._id}});
+
+            let conversation = await Conversation.findOne({
+                participants : {$all : [currentUser, userToModify]}
+            });
+
+            if(!conversation) {
+
+                conversation = await Conversation.create({
+                    participants : [currentUser, userToModify]
+                });
+            }
+
+            res.status(200).json({message : 'Conversation created'});
+        }
+
+    } catch (error) {
+        
+        console.log('error in createUsersConversation controller :', error.message);
+
+        res.status(500).json({error : 'Internal server error'});
+    }
+
+}
 
 
-export { signup, login, logout, getProfile, updateUser, searchUser, blockUser }
+export { signup, login, logout, getProfile, updateUser, searchUser, blockUser, AddConversation, getUserConversations }

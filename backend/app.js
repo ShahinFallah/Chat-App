@@ -1,9 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
-
 import connectDB from './db/connectDB.js';
-
 import userRoute from './routes/userRoute.js';
 import messageRoute from './routes/messagesRoute.js'
 
