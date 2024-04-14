@@ -183,7 +183,7 @@ const searchUser = async (req, res) => {
     try {
         const { query } = req.params;
 
-        const users = await User.find({ username: { $regex: query, $options: 'i' } }).select('username');
+        const users = await User.find({_id : {$ne : req.user._id}, username: { $regex: query, $options: 'i' } }).select('username');
 
         // const matchingUsernames = users.map(user => [user._id, user.username]);
 
@@ -192,6 +192,7 @@ const searchUser = async (req, res) => {
     } catch (error) {
 
         console.log('error in search controller', error.message);
+
         res.status(500).json({ error: 'Internal Server Error' });
     }
 

@@ -16,7 +16,7 @@ router.get('/:id', protectRoute, getProfile);
 
 router.put('/setting/:id', protectRoute, updateUser);
 
-router.get('/search/:query', searchUser);
+router.get('/search/:query', protectRoute, searchUser);
 
 router.post('/block/:id', protectRoute, blockUser);
 
