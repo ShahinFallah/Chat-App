@@ -262,7 +262,7 @@ const AddConversation = async (req, res) => {
                 });
             }
 
-            res.status(200).json({fullName : userToModify.fullName, username : userToModify.username, profilePic : userToModify.profilePic});
+            res.status(200).json({_id : userToModify._id, fullName : userToModify.fullName, username : userToModify.username, profilePic : userToModify.profilePic});
         }
 
     } catch (error) {
