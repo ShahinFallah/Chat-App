@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import User from '../models/userModel.js';
 import Conversation from '../models/conversationModel.js';
+import Message from '../models/messageModel.js';
 import generateTokenAndSetCookie from '../utils/generateToken.js';
 
 
@@ -233,8 +234,14 @@ const blockUser = async (req, res) => {
 const AddConversation = async (req, res) => {
 
     try {
-        const userToModify = await User.findById(req.params.id);
+        const userToModify = await User.findById(req.params.id).select('-password');
         const currentUser = await User.findById(req.user._id);
+        const conversationMessages = await Message.findOne({
+
+            senderId : currentUser,
+            receiverId : userToModify
+            
+        }).sort({createdAt : -1}).limit(1);
         
         if(userToModify === currentUser.toString()) return res.status({error : 'you cannot start conversation with yourself'});
 
@@ -255,7 +262,8 @@ const AddConversation = async (req, res) => {
                 });
             }
 
-            res.status(200).json({message : 'Conversation created'});
+            res.status(200).json({fullName : userToModify.fullName, username : userToModify.username, profilePic : userToModify.profilePic,
+            lastMessage : conversationMessages.message});
         }
 
     } catch (error) {
