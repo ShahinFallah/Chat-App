@@ -1,11 +1,12 @@
-import bcrypt from 'bcryptjs';
-import User from '../models/userModel.js';
-import Conversation from '../models/conversationModel.js';
+import User from '../models/userModel';
+import Conversation from '../models/conversationModel';
 // import Message from '../models/messageModel.js';
-import generateTokenAndSetCookie from '../utils/generateToken.js';
+import bcrypt from 'bcryptjs';
+import generateTokenAndSetCookie from '../utils/generateToken';
+import { Request, Response } from 'express';
 
 
-const signup = async (req, res) => {
+const signup = async (req : Request, res : Response) => {
 
     try {
         const { fullName, username, confirmPassword, password, gender } = req.body;
@@ -29,7 +30,7 @@ const signup = async (req, res) => {
 
         if(user) {
 
-            generateTokenAndSetCookie(user._id, res);
+            generateTokenAndSetCookie(user._id.toString(), res);
             await user.save();
 
             res.status(201).json({_id : user._id, fullName : user.fullName, username : user.username});
@@ -40,13 +41,13 @@ const signup = async (req, res) => {
 
     } catch (error) {
         
-        console.log('error in signup controller', error.message);
+        console.log('error in signup controller', error);
         res.status(500).json({error : 'internal server error'});
     }
 
 }
 
-const login = async (req, res) => {
+const login = async (req : Request, res : Response) => {
 
     try {
         const { username, password } = req.body;
@@ -56,19 +57,19 @@ const login = async (req, res) => {
 
         if(!user || !isPassword) return res.status(400).json({error : 'Invalid username or password'});
 
-        generateTokenAndSetCookie(user._id, res);
+        generateTokenAndSetCookie(user._id.toString(), res);
 
         res.status(200).json({_id : user._id, fullName : user.fullName, username : user.username});
 
     } catch (error) {
         
-        console.log('error in login controller', error.message);
+        console.log('error in login controller', error);
         res.status(500).json({error : 'internal server error'});
     }
     
 }
 
-const logout = async (req, res) => {
+const logout = async (req : Request, res : Response) => {
 
     try {
         res.cookie('jwt', '', {maxAge : 1});
@@ -77,13 +78,13 @@ const logout = async (req, res) => {
 
     } catch (error) {
 
-        console.log('error in logout controller', error.message);
+        console.log('error in logout controller', error);
         res.status(500).json({error : 'internal server error'});
     }
 
 }
 
-const getUserConversations = async (req, res) => {
+const getUserConversations = async (req : Request, res : Response) => {
     try {
         const loggedInUserId = req.user._id;
 
@@ -111,7 +112,7 @@ const getUserConversations = async (req, res) => {
 
     } catch (error) {
         
-        console.log('Error in getUserConversations controller', error.message);
+        console.log('Error in getUserConversations controller', error);
 
         res.status(500).json({ error: 'Internal server error' });
     }
@@ -119,7 +120,7 @@ const getUserConversations = async (req, res) => {
 
 
 
-const getProfile = async (req, res) => {
+const getProfile = async (req : Request, res : Response) => {
 
     try {
         const { id } = req.params;
@@ -132,13 +133,13 @@ const getProfile = async (req, res) => {
 
     } catch (error) {
         
-        console.log('error in getProfile controller', error.message);
+        console.log('error in getProfile controller', error);
         res.status(500).json({error : 'internal server error'});
     }
 
 }
 
-const updateUser = async (req, res) => {
+const updateUser = async (req : Request, res : Response) => {
 
     try {
         const { fullName, username, password, gender, bio } = req.body;
@@ -173,13 +174,13 @@ const updateUser = async (req, res) => {
 
     } catch (error) {
         
-        console.log('error in updateUser controller', error.message);
+        console.log('error in updateUser controller', error);
         res.status(500).json({error : 'internal server error'});
     }
 
 }
 
-const searchUser = async (req, res) => {
+const searchUser = async (req : Request, res : Response) => {
 
     try {
         const { query } = req.params;
@@ -192,14 +193,14 @@ const searchUser = async (req, res) => {
 
     } catch (error) {
 
-        console.log('error in search controller', error.message);
+        console.log('error in search controller', error);
 
         res.status(500).json({ error: 'Internal Server Error' });
     }
 
 }
 
-const blockUser = async (req, res) => {
+const blockUser = async (req : Request, res : Response) => {
 
     try {
         const { id } = req.params;
@@ -209,7 +210,7 @@ const blockUser = async (req, res) => {
 
         if(id === req.user._id.toString()) return res.status(400).json({error : 'You cannot block or unBlock yourself'});
 
-        const isBlock = currentUser.blockedUsers.includes(id);
+        const isBlock = currentUser.blockedUsers.includes(userToModify._id);
 
         if(isBlock) {
 
@@ -225,13 +226,13 @@ const blockUser = async (req, res) => {
 
     } catch (error) {
         
-        console.log('error in block controller', error.message);
+        console.log('error in block controller', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 
 }
 
-const AddConversation = async (req, res) => {
+const AddConversation = async (req : Request, res : Response) => {
 
     try {
         const userToModify = await User.findById(req.params.id).select('-password');
@@ -243,7 +244,7 @@ const AddConversation = async (req, res) => {
             
         // }).sort({createdAt : -1}).limit(1);
         
-        if(userToModify === currentUser.toString()) return res.status({error : 'you cannot start conversation with yourself'});
+        if(userToModify._id.toString() === currentUser._id.toString()) return res.status(400).json({error : 'you cannot start conversation with yourself'});
 
         const isHaveConversation = currentUser.conversations.includes(userToModify._id);
 

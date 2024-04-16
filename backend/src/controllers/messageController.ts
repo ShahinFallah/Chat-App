@@ -1,8 +1,9 @@
-import Conversation from '../models/conversationModel.js';
-import Message from '../models/messageModel.js';
+import Conversation from '../models/conversationModel';
+import Message from '../models/messageModel';
+import { Request, Response } from 'express';
 
 
-const sendMessage = async (req, res) => {
+const sendMessage = async (req : Request, res : Response) => {
 
     try {
         const { message } = req.body;
@@ -32,13 +33,13 @@ const sendMessage = async (req, res) => {
 
     } catch (error) {
         
-        console.log(`error in sendMessage controller :`, error.message);
+        console.log(`error in sendMessage controller :`, error);
         res.status(500).json({error : 'Internal server error'});
     }
 
 }
 
-const getMessages = async (req, res) => {
+const getMessages = async (req : Request, res : Response) => {
 
     try {
         const { id: userToChat } = req.params;
@@ -56,7 +57,7 @@ const getMessages = async (req, res) => {
 
     } catch (error) {
 
-        console.log('Error in getMessages Controller :', error.message);
+        console.log('Error in getMessages Controller :', error);
         res.status(500).json({error : 'internal server error'});
     }
 

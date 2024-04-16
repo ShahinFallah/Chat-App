@@ -1,6 +1,6 @@
 import express from 'express';
-import { AddConversation, blockUser, getProfile, getUserConversations, login, logout, searchUser, signup, updateUser } from '../controllers/userController.js';
-import protectRoute from '../middleware/protectRoute.js';
+import { AddConversation, blockUser, getProfile, getUserConversations, login, logout, searchUser, signup, updateUser } from '../controllers/userController';
+import protectRoute from '../middleware/protectRoute';
 
 const router = express.Router();
 
