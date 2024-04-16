@@ -32,5 +32,17 @@
 ::-webkit-scrollbar-thumb:hover {
     background: #242424;
 }
-  
-  
+
+.add-conversation-loading {
+    animation: add-conversation-loading 0.5s;
+}
+
+
+@keyframes add-conversation-loading {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
