@@ -1,10 +1,11 @@
 import express, { Express } from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
+import compression from 'compression'
+
 import connectDB from './db/connectDB';
 import userRoute from './routes/userRoute';
 import messageRoute from './routes/messagesRoute'
-import compression from 'compression'
 
 
 dotenv.config();

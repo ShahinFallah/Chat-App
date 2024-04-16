@@ -1,5 +1,6 @@
 import express from 'express';
-import { AddConversation, blockUser, getProfile, getUserConversations, login, logout, searchUser, signup, updateUser } from '../controllers/userController';
+import { getProfile, login, logout, signup, updateUser } from '../controllers/userController';
+import { searchUser, blockUser, AddConversation, getUserConversations, deleteConversation } from '../controllers/conversationController'
 import protectRoute from '../middleware/protectRoute';
 
 const router = express.Router();
@@ -10,17 +11,19 @@ router.post('/login', login);
 
 router.post('/logout', logout);
 
-router.get('/conversations', protectRoute, getUserConversations);
+router.put('/setting/:id', protectRoute, updateUser);
 
 router.get('/:id', protectRoute, getProfile);
-
-router.put('/setting/:id', protectRoute, updateUser);
 
 router.get('/search/:query', protectRoute, searchUser);
 
 router.post('/block/:id', protectRoute, blockUser);
 
 router.post('/conversation/:id', protectRoute, AddConversation);
+
+router.get('/conversations', protectRoute, getUserConversations);
+
+router.post('/conversation/delete/:id', protectRoute, deleteConversation);
 
 
 export default router;
