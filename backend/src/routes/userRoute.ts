@@ -11,9 +11,11 @@ router.post('/login', login);
 
 router.post('/logout', logout);
 
-router.put('/setting/:id', protectRoute, updateUser);
+router.get('/conversations', protectRoute, getUserConversations);
 
 router.get('/:id', protectRoute, getProfile);
+
+router.put('/setting/:id', protectRoute, updateUser);
 
 router.get('/search/:query', protectRoute, searchUser);
 
@@ -21,9 +23,7 @@ router.post('/block/:id', protectRoute, blockUser);
 
 router.post('/conversation/:id', protectRoute, AddConversation);
 
-router.get('/conversations', protectRoute, getUserConversations);
-
-router.post('/conversation/delete/:id', protectRoute, deleteConversation);
+router.delete('/conversations/delete/:id', protectRoute, deleteConversation);
 
 
 export default router;
