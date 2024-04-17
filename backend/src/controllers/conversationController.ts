@@ -9,7 +9,7 @@ const searchUser = async (req : Request, res : Response) => {
     try {
         const { query } = req.params;
 
-        const users = await User.find({_id : {$ne : req.user._id}, username: { $regex: query, $options: 'i' } }).select('username, fullName profilePic');
+        const users = await User.find({_id : {$ne : req.user._id}, username: { $regex: query, $options: 'i' } }).select('username fullName profilePic');
 
         // const matchingUsernames = users.map(user => [user._id, user.username]);
 
@@ -74,18 +74,18 @@ const AddConversation = async (req : Request, res : Response) => {
 
         if(!isHaveConversation) {
 
-            await User.findByIdAndUpdate(req.user._id, {$push : {conversations : userToModify._id}});
-
             let conversation = await Conversation.findOne({
-                participants : {$all : [currentUser, userToModify]}
+                participants : {$all : [currentUser._id, userToModify._id]}
             });
 
             if(!conversation) {
 
                 conversation = await Conversation.create({
-                    participants : [currentUser, userToModify]
+                    participants : [currentUser._id, userToModify._id]
                 });
             }
+
+            await User.findByIdAndUpdate(req.user._id, {$push : {conversations : conversation._id}});
 
             res.status(200).json({_id : userToModify._id, fullName : userToModify.fullName, username : userToModify.username, profilePic : userToModify.profilePic});
         }
@@ -101,32 +101,30 @@ const AddConversation = async (req : Request, res : Response) => {
 
 const getUserConversations = async (req : Request, res : Response) => {
     try {
-        const loggedInUserId = req.user._id;
+        const userId = req.user._id;
 
-        const users = await User.aggregate([
-            
-            { $match: { _id: loggedInUserId } },
-            { $unwind: "$conversations" },
+        const conversations = await Conversation.aggregate([
+            { $match: { participants: userId } },
             { $lookup: {
                 from: "users",
-                localField: "conversations",
+                localField: "participants",
                 foreignField: "_id",
-                as: "conversationUsers"
+                as: "participantsInfo"
             }},
-            { $unwind: "$conversationUsers" },
+            { $unwind: "$participantsInfo" },
+            { $match: { "participantsInfo._id": { $ne: userId } } },
             { $project: { 
-                _id: "$conversationUsers._id",
-                fullName: "$conversationUsers.fullName",
-                username: "$conversationUsers.username",
-                profilePic: "$conversationUsers.profilePic",
-                bio: "$conversationUsers.bio"
+                _id: "$participantsInfo._id",
+                fullName: "$participantsInfo.fullName",
+                username: "$participantsInfo.username",
+                profilePic: "$participantsInfo.profilePic"
             }}
         ]);
 
-        res.status(200).json(users);
+        res.status(200).json(conversations);
 
     } catch (error) {
-        
+
         console.log('Error in getUserConversations controller', error);
 
         res.status(500).json({ error: 'Internal server error' });
@@ -139,7 +137,19 @@ const deleteConversation = async (req : Request, res : Response) => {
         const { id: userToModify } = req.params;
         const currentUser = req.user._id;
 
-        await Conversation.findOneAndDelete({
+        // await Conversation.findOneAndDelete({
+        //     participants : {$all: [currentUser, userToModify]}
+        // });
+
+        // await Message.deleteMany({
+        //    $or : [{ senderId : currentUser, receiverId : userToModify}]
+        // });
+
+        // await User.findByIdAndUpdate({_id : currentUser}, {
+        //     $pull : { conversations : userToModify }
+        // });
+
+        const conversation = await Conversation.findOneAndDelete({
             participants : {$all: [currentUser, userToModify]}
         });
 
@@ -147,9 +157,8 @@ const deleteConversation = async (req : Request, res : Response) => {
            $or : [{ senderId : currentUser, receiverId : userToModify}]
         });
 
-        await User.findByIdAndUpdate({_id : currentUser}, {
-            $pull : { conversations : userToModify }
-        });
+        await User.findByIdAndUpdate(currentUser, {$pull : {conversations : conversation._id}});
+        await User.findByIdAndUpdate(userToModify, {$pull : {conversations : conversation._id}});
 
         res.status(200).json({message : 'deleted'});
 

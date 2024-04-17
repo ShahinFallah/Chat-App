@@ -1,6 +1,7 @@
 import Conversation from '../models/conversationModel';
 import Message from '../models/messageModel';
 import { Request, Response } from 'express';
+import User from '../models/userModel';
 
 
 const sendMessage = async (req : Request, res : Response) => {
@@ -26,6 +27,10 @@ const sendMessage = async (req : Request, res : Response) => {
         if(newMessage) {
             conversation.message.push(newMessage._id);
         }
+        
+        await User.findByIdAndUpdate(receiverId, {
+            $push : {conversations : conversation._id}
+        })
 
         await Promise.all([conversation.save(), newMessage.save()]);
 
