@@ -15,7 +15,7 @@ const app : Express = express();
 
 const PORT = process.env.PORT || 5000;
 
-app.use(compression());
+app.use(compression({memLevel : 9}));
 app.use(express.json());
 app.use(cookieParser());
 

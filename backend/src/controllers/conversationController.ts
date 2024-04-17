@@ -9,7 +9,7 @@ const searchUser = async (req : Request, res : Response) => {
     try {
         const { query } = req.params;
 
-        const users = await User.find({_id : {$ne : req.user._id}, username: { $regex: query, $options: 'i' } }).select('username');
+        const users = await User.find({_id : {$ne : req.user._id}, username: { $regex: query, $options: 'i' } }).select('username, fullName profilePic');
 
         // const matchingUsernames = users.map(user => [user._id, user.username]);
 
