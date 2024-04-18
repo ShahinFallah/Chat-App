@@ -5,21 +5,24 @@ import chatConversationHandler from '../../../zustand/useChatConversationHandler
 function Messages() {
   const { messages, loading } = useGetMessages()
   const lastMessageRef = useRef()
-  const { selectedConversation } = chatConversationHandler
+  const { selectedConversation } = chatConversationHandler()
 
 
   useEffect(() => {
-    if (!lastMessageRef.current) return
+    const scroll = setTimeout(() => {
+      if (!lastMessageRef || !lastMessageRef.current) return
 
-    setTimeout(() => {
       lastMessageRef.current.scrollIntoView({ behavior: "smooth" })
-    }, 100)
-  }, [selectedConversation, messages])
+    }, 200)
+
+    return () => clearTimeout(scroll)
+
+  }, [selectedConversation, messages, loading])
 
   return (
     <div className="flex flex-col flex-grow-[1] overflow-x-auto my-6">
 
-      
+
       {// When the conversation was established
         !loading && messages.length > 0 &&
         messages.map(message => (
