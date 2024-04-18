@@ -2,7 +2,6 @@ import Conversation from '../models/conversationM';
 import Message from '../models/messageModel';
 import { Request, Response } from 'express';
 import User from '../models/userModel';
-import { getReceiverSocketId, io } from "../socket/socket";
 
 
 const sendMessage = async (req : Request, res : Response) => {
@@ -27,18 +26,13 @@ const sendMessage = async (req : Request, res : Response) => {
         
         if(newMessage) {
             conversation.message.push(newMessage._id);
-        };
+        }
         
         await User.findByIdAndUpdate(receiverId, {
             $push : {conversations : conversation._id}
-        });
+        })
 
         await Promise.all([conversation.save(), newMessage.save()]);
-
-        const receiverSocketId = getReceiverSocketId(receiverId);
-        if (receiverSocketId) {
-            io.to(receiverSocketId).emit("newMessage", newMessage);
-        }
 
         res.status(201).json(newMessage);
 

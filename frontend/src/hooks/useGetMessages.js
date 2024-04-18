@@ -6,11 +6,15 @@ function useGetMessages() {
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
+        let isMounted = true;
+
         const getMessages = async () => {
 
             setLoading(true)
             try {
                 const res = await fetch(`api/messages/${selectedConversation._id}`)
+
+                if (!isMounted) return;
 
                 const data = await res.json()
                 if (data.error) throw new Error(data.error);
@@ -23,8 +27,10 @@ function useGetMessages() {
                 setLoading(false)
             }
         }
-
+        
         getMessages(selectedConversation._id)
+
+        return () => isMounted = false
     }, [selectedConversation])
     return { messages, loading }
 }
