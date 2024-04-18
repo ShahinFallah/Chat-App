@@ -1,10 +1,12 @@
 import { useState } from "react"
 import toast from "react-hot-toast"
-import getConversations from "../zustand/getConversations"
+import useConversations from "../zustand/useConversations"
+import chatConversationHandler from '../zustand/useChatConversationHandler'
 
 function useDeleteConversation() {
     const [loading, setLoading] = useState(false)
-    const { conversations, addConversations } = getConversations()
+    const { conversations, addConversations } = useConversations()
+    const { setSelectedConversation, selectedConversation } = chatConversationHandler()
 
     const deleteConversation = async id => {
         setLoading(true)
@@ -13,10 +15,11 @@ function useDeleteConversation() {
                 method: 'delete'
             })
             const data = await res.json()
-
             if (data.error) throw new Error(data.error)
 
             addConversations(conversations.filter(conversation => conversation._id !== id))
+
+            if (selectedConversation?._id === id) setSelectedConversation(null)
         } catch (error) {
             toast.error(error.message)
         } finally {

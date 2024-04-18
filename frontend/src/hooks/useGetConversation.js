@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
-import getConversations from "../zustand/getConversations"
+import useConversations from "../zustand/useConversations"
 
 function useGetConversation() {
     const [loading, setLoading] = useState(false)
-    const { conversations, addConversations } = getConversations() 
+    const { conversations, addConversations } = useConversations() 
     
     useEffect(() => {
         

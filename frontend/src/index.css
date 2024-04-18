@@ -37,6 +37,9 @@
     animation: add-conversation-loading 0.5s;
 }
 
+.text-shadow {
+    text-shadow: 0 5px 10px #4d648d8a;
+}
 
 @keyframes add-conversation-loading {
     from {

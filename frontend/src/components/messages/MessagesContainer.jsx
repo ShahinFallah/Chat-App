@@ -3,12 +3,15 @@ import MessagesHeader from "./MessagesHeader"
 import Messages from "./messages/Messages"
 import { TbMessageChatbot } from "react-icons/tb";
 import { useAuthContext } from '../../context/AuthContext'
+import useChatConversationHandler from '../../zustand/useChatConversationHandler'
 
 function MessagesContainer() {
+  const { selectedConversation } = useChatConversationHandler()
+
   return (
     <div className="flex flex-col flex-grow-[1] ml-4 pt-3 rounded-lg">
       {
-        false ? (
+        selectedConversation ? (
           <>
             <MessagesHeader />
             <Messages />

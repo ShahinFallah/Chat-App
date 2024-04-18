@@ -1,11 +1,29 @@
 import { FaTrash } from "react-icons/fa6";
 import useDeleteConversation from "../../../hooks/useDeleteConversation";
+import useChatConversationHandler from '../../../zustand/useChatConversationHandler'
 
 function Conversation({ conversation }) {
     const { loading: deleteLoading, deleteConversation } = useDeleteConversation()
+    const { setSelectedConversation, selectedConversation } = useChatConversationHandler()
+
+    const isSelected = selectedConversation?._id === conversation._id
+
+    const handleDelete = async e => {
+        e.stopPropagation()
+
+        await deleteConversation(conversation._id)
+    }
+
+    const handleClick = () => {
+        if (deleteLoading) return;
+        
+        setSelectedConversation(conversation)
+    }
 
     return (
-        <div className={`flex items-center justify-between cursor-pointer group hover:bg-background_300 p-1 rounded-lg transition duration-100 py-2 ${deleteLoading ? "opacity-55" : ""}`}>
+        <div 
+        onClick={handleClick} 
+        className={`flex items-center justify-between cursor-pointer group hover:bg-background_300 ${isSelected ? "bg-background_200" : ""} p-1 rounded-lg transition duration-100 py-2 ${deleteLoading ? "opacity-55" : ""}`}>
             {
                 false ?
                     <div className="avatar online">
@@ -26,14 +44,14 @@ function Conversation({ conversation }) {
             </div>
             {
                 !deleteLoading ?
-                    <FaTrash onClick={() => deleteConversation(conversation._id)} className="mr-2 text-sm opacity-0 group-hover:opacity-100 hover:text-error transition-opacity duration-300" /> :
+                    <FaTrash onClick={handleDelete} className="mr-2 text-sm opacity-0 group-hover:opacity-100 hover:text-error transition-opacity duration-300" /> :
                     <span className="loading loading-ball"></span>
             }
         </div>
     )
 }
 
-const showNameInProfile = (name) => {
+export const showNameInProfile = (name) => {
     const fullName = name.split(" ")
     const result = fullName.length > 1 ? `${fullName[0].charAt(0)}${fullName[1].charAt(0)}` : fullName[0].charAt(0)
     return result.toUpperCase()

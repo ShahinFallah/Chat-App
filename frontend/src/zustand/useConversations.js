@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-const getConversations = create(set => ({
+const useConversations = create(set => ({
     autoCompleteConversation: null,
     addAutoCompleteConversation: conversation => set({ autoCompleteConversation: conversation[0] ? conversation : null }),
     conversations: [],
@@ -9,4 +9,4 @@ const getConversations = create(set => ({
     setAddConLoading: (state) => set({ addConLoading: state })
 }))
 
-export default getConversations
+export default useConversations

@@ -1,11 +1,11 @@
 import Conversation from "./Conversation"
 // import { IoAddCircleOutline } from "react-icons/io5";
 import useGetConversation from "../../../hooks/useGetConversation";
-import getConversations from "../../../zustand/getConversations"
+import useConversations from "../../../zustand/useConversations"
 
 function Conversations() {
   const { loading: getLoading } = useGetConversation()
-  const { conversations, addConLoading } = getConversations()
+  const { conversations, addConLoading } = useConversations()
   return (
     <>
       {addConLoading && (

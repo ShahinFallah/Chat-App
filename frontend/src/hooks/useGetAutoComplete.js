@@ -1,9 +1,9 @@
 import { useState } from "react"
 import toast from "react-hot-toast";
-import getAutoComplete from '../zustand/getConversations'
+import useAutoComplete from '../zustand/useConversations'
 
 function useGetConversation() {
-    const { addAutoCompleteConversation } = getAutoComplete()
+    const { addAutoCompleteConversation } = useAutoComplete()
 
     const [loading, setLoading] = useState(false)
 
@@ -23,7 +23,6 @@ function useGetConversation() {
             toast.error(error.message)
         } finally {
             setLoading(false)
-            console.log('call')
         }
     }
 

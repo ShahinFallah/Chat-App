@@ -21,7 +21,8 @@ export default {
       bubble_start_color: "#656fdb",
       bubble_end_color: "#2e394f"
 
-    }
+    },
+    
   },
   plugins: [require("daisyui")],
 }

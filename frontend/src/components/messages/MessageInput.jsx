@@ -1,13 +1,39 @@
 import { VscSend } from "react-icons/vsc";
+import useSendMessage from "../../hooks/useSendMessage";
+import { useState } from "react";
 
 function MessageInput() {
+  const { loading, sendMessage } = useSendMessage()
+  const [inputValue, setInputValue] = useState("")
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+
+    await sendMessage(inputValue)
+    setInputValue("")
+  }
+
   return (
     <form>
-      <div className="flex items-center bg-background p-2 rounded-lg border border-primary_200 bg-opacity-35">
+      <div className="flex items-center bg-background p-3 rounded-lg border border-primary_200 bg-opacity-35">
         <div className="flex flex-grow-[1]">
-          <input placeholder="Send a message" className="bg-transparent w-full break-words outline-none" type="text" />
+          <input
+            type="text"
+            className="bg-transparent w-full break-words outline-none"
+            placeholder="Send a message"
+            value={inputValue}
+            onChange={e => setInputValue(e.target.value)}
+          />
         </div>
-        <button type="submit" className="text-primary text-lg"><VscSend /></button>
+        <button disabled={loading} onClick={handleSubmit} type="submit" className="text-primary text-lg">
+          {
+            !loading ?
+              <VscSend /> :
+              <div className="flex justify-center items-center">
+                <span className="loading loading-spinner loading-sm m-0"></span>
+              </div>
+          }
+        </button>
       </div>
     </form>
   )

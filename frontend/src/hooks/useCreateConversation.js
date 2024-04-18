@@ -1,19 +1,22 @@
 import toast from "react-hot-toast"
-import getConversations from "../zustand/getConversations"
+import useConversations from "../zustand/useConversations"
+import chatConversationHandler from '../zustand/useChatConversationHandler'
 
 function useCreateConversation() {
-    const { addConversations, conversations, setAddConLoading } = getConversations()
+    const { setSelectedConversation } = chatConversationHandler()
+    
+    const { addConversations, conversations, setAddConLoading } = useConversations()
 
-    const createConversation = async id => {
-        const addConversationState = conversations.some(conversation => conversation._id === id)
+    const createConversation = async conversation => {
+        const addConversationState = conversations.find(con => con._id === conversation._id)
         
         if (addConversationState) {
-            return toast.error('this user has already in conversation')
+            return setSelectedConversation(addConversationState)
         }
         
         setAddConLoading(true)
         try {
-            const res = await fetch(`/api/users/conversation/${id}`, {
+            const res = await fetch(`/api/users/conversation/${conversation._id}`, {
                 method: 'POST',
                 headers: { "Content-Type": "application/json" }
             })
@@ -23,6 +26,7 @@ function useCreateConversation() {
             if (data.error) throw new Error(data.error)
 
             addConversations([...conversations, data])
+            setSelectedConversation(conversation)
         } catch (error) {
             toast.error(error.message)
         } finally {
