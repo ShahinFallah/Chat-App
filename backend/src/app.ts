@@ -1,4 +1,5 @@
-import express, { Express } from 'express';
+import express from 'express';
+import { app, server } from './socket/socket';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import compression from 'compression'
@@ -11,11 +12,9 @@ import messageRoute from './routes/messagesRoute'
 dotenv.config();
 connectDB();
 
-const app : Express = express();
-
 const PORT = process.env.PORT || 5000;
 
-app.use(compression({memLevel : 9}));
+app.use(compression());
 app.use(express.json());
 app.use(cookieParser());
 
@@ -24,6 +23,6 @@ app.use('/api/users', userRoute);
 app.use('/api/messages', messageRoute);
 
 
-app.listen(PORT, () => console.log(`server is running on port ${PORT}`));
+server.listen(PORT, () => console.log(`server is running on port ${PORT}`));
 
 export default app;

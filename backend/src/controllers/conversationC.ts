@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 
 import User from '../models/userModel';
-import Conversation from '../models/conversationModel';
+import Conversation from '../models/conversationM';
 import Message from '../models/messageModel';
 
 const searchUser = async (req : Request, res : Response) => {

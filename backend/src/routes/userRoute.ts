@@ -1,6 +1,6 @@
 import express from 'express';
 import { getProfile, login, logout, signup, updateUser } from '../controllers/userController';
-import { searchUser, blockUser, AddConversation, getUserConversations, deleteConversation } from '../controllers/conversationController'
+import { searchUser, blockUser, AddConversation, getUserConversations, deleteConversation } from '../controllers/conversationC'
 import protectRoute from '../middleware/protectRoute';
 
 const router = express.Router();
