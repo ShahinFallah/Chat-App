@@ -2,7 +2,7 @@ import Conversation from '../models/conversationM';
 import Message from '../models/messageModel';
 import { Request, Response } from 'express';
 import User from '../models/userModel';
-
+import { getReceiverSocketId, io } from "../socket/socket";
 
 const sendMessage = async (req : Request, res : Response) => {
 
@@ -33,6 +33,11 @@ const sendMessage = async (req : Request, res : Response) => {
         })
 
         await Promise.all([conversation.save(), newMessage.save()]);
+
+        const receiverSocketId = getReceiverSocketId(receiverId);
+        if (receiverSocketId) {
+            io.to(receiverSocketId).emit("newMessage", newMessage);
+        }
 
         res.status(201).json(newMessage);
 
