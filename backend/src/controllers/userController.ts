@@ -1,5 +1,5 @@
 import User from '../models/userModel';
-import Conversation from '../models/conversationModel';
+import Conversation from '../models/conversationM';
 // import Message from '../models/messageModel.js';
 import bcrypt from 'bcryptjs';
 import generateTokenAndSetCookie from '../utils/generateToken';

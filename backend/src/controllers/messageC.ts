@@ -1,4 +1,4 @@
-import Conversation from '../models/conversationModel';
+import Conversation from '../models/conversationM';
 import Message from '../models/messageModel';
 import { Request, Response } from 'express';
 import User from '../models/userModel';

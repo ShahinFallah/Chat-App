@@ -1,6 +1,6 @@
 import express from 'express';
 import protectRoute from '../middleware/protectRoute';
-import { sendMessage, getMessages } from '../controllers/messageController'
+import { sendMessage, getMessages } from '../controllers/messageC'
 
 const router = express.Router();
 
