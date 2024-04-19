@@ -12,9 +12,6 @@ const sendMessage = async (req : Request, res : Response) => {
         const { id: receiverId } = req.params;
         const senderId = req.user._id;
 
-        const userToUpdate = await User.findByIdAndUpdate(senderId, {$pull : {notInConversation : receiverId}});
-        await userToUpdate.save();
-
         let conversation = await Conversation.findOne({
             participants : {$all: [senderId, receiverId]}
         });
@@ -33,6 +30,8 @@ const sendMessage = async (req : Request, res : Response) => {
             receiverId,
             message
         });
+
+        conversation.message.push(newMessage._id);
 
         await Promise.all([conversation.save(), newMessage.save()]);
 

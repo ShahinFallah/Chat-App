@@ -1,17 +1,17 @@
-// import { client } from '../config/redis';
+import { client } from '../config/redis';
 
-// const connectRedis = async () => {
+const connectRedis = async () => {
 
-//     try {
-//         await client.connect();
+    try {
+        await client.connect();
 
-//         console.log('redis connected');
+        console.log('redis connected');
 
-//     } catch (error) {
+    } catch (error) {
         
-//         console.log('failed to connect redis', error);
-//     }
+        console.log('failed to connect redis', error);
+    }
 
-// }
+}
 
-// export default connectRedis;
+export default connectRedis;

@@ -8,7 +8,7 @@ router.get('/', protectRoute, getUserConversations);
 
 router.get('/search/:query', protectRoute, searchUser);
 
-router.post('/add/:id', protectRoute, AddConversation);
+router.get('/add/:id', protectRoute, AddConversation);
 
 router.delete('/delete/:id', protectRoute, deleteConversation);
 

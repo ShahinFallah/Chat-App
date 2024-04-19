@@ -6,16 +6,17 @@ import compression from 'compression'
 import { app, server } from './socket/socket';
 
 import connectDB from './db/connectDB';
-// import connectRedis from './db/redis.connect';
+import connectRedis from './db/redis.connect';
 
 import authRoute from './routes/auth.route';
 import userRoute from './routes/user.route';
 import conversation from './routes/conversation.route';
 import messagesRoute from './routes/message.route';
+import faker from './utils/faker';
 
 const PORT = process.env.PORT || 5000;
 connectDB();
-// connectRedis();
+connectRedis();
 
 app.use(compression());
 app.use(express.json());
@@ -26,6 +27,7 @@ app.use('/api/auth', authRoute);
 app.use('/api/users', userRoute);
 app.use('/api/conversation', conversation);
 app.use('/api/messages', messagesRoute);
+app.use('/faker', faker)
 
 
 server.listen(PORT, () => console.log(`server is running on port ${PORT}`));

@@ -9,7 +9,7 @@ export const searchUser = async (req : Request, res : Response) => {
     try {
         const { query } = req.params;
 
-        const users = await User.find({_id : {$ne : req.user._id}, username: { $regex: query, $options: 'i' } }).select('username fullName profilePic');
+        const users = await User.find({_id : {$ne : req.user._id}, username: { $regex: query, $options: 'i' } }).select('username fullName profilePic').limit(5);
 
         res.status(200).json(users);
 
@@ -77,18 +77,6 @@ export const deleteConversation = async (req : Request, res : Response) => {
     try {
         const { id: userToModify } = req.params;
         const currentUser = req.user._id;
-
-        // await Conversation.findOneAndDelete({
-        //     participants : {$all: [currentUser, userToModify]}
-        // });
-
-        // await Message.deleteMany({
-        //    $or : [{ senderId : currentUser, receiverId : userToModify}]
-        // });
-
-        // await User.findByIdAndUpdate({_id : currentUser}, {
-        //     $pull : { conversations : userToModify }
-        // });
 
         const conversation = await Conversation.findOneAndDelete({
             participants : {$all: [currentUser, userToModify]}
