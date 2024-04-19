@@ -1,22 +1,25 @@
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import useConversations from "../zustand/useConversations"
+import { useAuthContext } from "../context/AuthContext"
 
 function useGetConversation() {
-    const [loading, setLoading] = useState(false)
-    const { conversations, addConversations } = useConversations() 
+    const { userAuth } = useAuthContext()
     
+    const [loading, setLoading] = useState(false)
+    const { conversations, addConversations } = useConversations()
+
     useEffect(() => {
-        
+
         const getConversation = async () => {
             setLoading(true)
             try {
-                const res = await fetch('api/conversation')
+                const res = await fetch(`api/conversation/${userAuth._id}`)
                 const data = await res.json()
 
                 if (data.error) throw new Error(data.error)
 
-                addConversations([...conversations,...data])
+                addConversations([...conversations, ...data])
             } catch (error) {
                 toast.error(error.message)
             } finally {
@@ -27,7 +30,7 @@ function useGetConversation() {
         getConversation()
     }, [])
 
-    return {loading}
+    return { loading }
 }
 
 export default useGetConversation
