@@ -16,17 +16,14 @@ function useCreateConversation() {
         
         setAddConLoading(true)
         try {
-            const res = await fetch(`/api/users/conversation/${conversation._id}`, {
-                method: 'POST',
-                headers: { "Content-Type": "application/json" }
-            })
+            const res = await fetch(`/api/conversation/add/${conversation._id}`)
 
             const data = await res.json()
 
             if (data.error) throw new Error(data.error)
 
             addConversations([...conversations, data])
-            setSelectedConversation(conversation)
+            setSelectedConversation(data)
         } catch (error) {
             toast.error(error.message)
         } finally {

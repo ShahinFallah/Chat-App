@@ -4,6 +4,7 @@ import useCreateConversation from "../../../hooks/useCreateConversation";
 function AutoComplete({ conversation }) {
     const { createConversation } = useCreateConversation()
     const handleClick = async () => {
+        conversation.messagesState = true
         await createConversation(conversation)
     }
 

@@ -13,7 +13,7 @@ function useGetConversation() {
 
         setLoading(true)
         try {
-            const res = await fetch(`api/users/search/${value}`)
+            const res = await fetch(`api/conversation/search/${value}`)
             const data = await res.json()
 
             if (data.error) throw new Error(data.error)

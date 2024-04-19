@@ -11,7 +11,7 @@ function useGetConversation() {
         const getConversation = async () => {
             setLoading(true)
             try {
-                const res = await fetch('api/users/conversations')
+                const res = await fetch('api/conversation')
                 const data = await res.json()
 
                 if (data.error) throw new Error(data.error)

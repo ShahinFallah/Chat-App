@@ -11,7 +11,7 @@ function useDeleteConversation() {
     const deleteConversation = async id => {
         setLoading(true)
         try {
-            const res = await fetch(`/api/users/conversations/delete/${id}`, {
+            const res = await fetch(`/api/conversation/delete/${id}`, {
                 method: 'delete'
             })
             const data = await res.json()

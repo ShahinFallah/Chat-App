@@ -10,7 +10,6 @@ function Conversation({ conversation }) {
 
     const isSelected = selectedConversation?._id === conversation._id
     const isOnline = onlineUsers.includes(conversation._id)
-    console.log(onlineUsers)
 
     const handleDelete = async e => {
         e.stopPropagation()
