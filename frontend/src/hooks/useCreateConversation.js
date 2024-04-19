@@ -22,8 +22,8 @@ function useCreateConversation() {
 
             if (data.error) throw new Error(data.error)
 
-            addConversations([...conversations, data])
-            setSelectedConversation(data)
+            addConversations([...conversations, conversation.conversationState ? conversation : data])
+            setSelectedConversation(conversation)
         } catch (error) {
             toast.error(error.message)
         } finally {

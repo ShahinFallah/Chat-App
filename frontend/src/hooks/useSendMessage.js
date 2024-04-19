@@ -10,7 +10,7 @@ function useSendMessage() {
     const sendMessage = async message => {
         if (!message) return
 
-        // if (selectedConversation.messagesState) selectedConversation.messagesState = false
+        if (selectedConversation.conversationState) selectedConversation.conversationState = false
 
         setLoading(true)
         try {

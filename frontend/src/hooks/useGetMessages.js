@@ -6,7 +6,9 @@ function useGetMessages() {
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        if (selectedConversation.messagesState) return
+        if (selectedConversation.conversationState) {
+            return setMessage([])
+        }
         
         let isMounted = true;
 
