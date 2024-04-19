@@ -18,7 +18,7 @@ export const getReceiverSocketId = (receiverId : any) => {
 
 const userSocketMap = <any>{};
 
-io.on('connection', (socket) => {
+io.on('connection', (socket : any) => {
     console.log('a user connected', socket.id);
 
     const userId : any = socket.handshake.query.userId;

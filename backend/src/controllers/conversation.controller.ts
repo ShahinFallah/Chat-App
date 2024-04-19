@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { client } from '../config/redis';
 
 import User from '../models/userModel';
 import Conversation from '../models/conversationM';
@@ -10,6 +11,9 @@ export const searchUser = async (req : Request, res : Response) => {
         const { query } = req.params;
 
         const users = await User.find({_id : {$ne : req.user._id}, username: { $regex: query, $options: 'i' } }).select('username fullName profilePic').limit(5);
+
+        await client.set(query, JSON.stringify(users));
+        await client.expire(query, 240);
 
         res.status(200).json(users);
 
@@ -42,6 +46,7 @@ export const AddConversation = async (req : Request, res : Response) => {
 
 export const getUserConversations = async (req : Request, res : Response) => {
     try {
+        const { id } = req.params; // for redis
         const userId = req.user._id;
 
         const conversations = await Conversation.aggregate([
@@ -61,6 +66,9 @@ export const getUserConversations = async (req : Request, res : Response) => {
                 profilePic: "$participantsInfo.profilePic"
             }}
         ]);
+
+        await client.set(id, JSON.stringify(conversations));
+        await client.expire(id, 60);
 
         res.status(200).json(conversations);
 
