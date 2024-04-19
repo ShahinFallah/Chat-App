@@ -1,8 +1,9 @@
-import Conversation from '../models/conversationM';
-import Message from '../models/messageModel';
 import { Request, Response } from 'express';
+import { getReceiverSocketId, io } from '../socket/socket';
+
+import Message from '../models/messageModel';
 import User from '../models/userModel';
-import { getReceiverSocketId, io } from "../socket/socket";
+import Conversation from '../models/conversationM';
 
 const sendMessage = async (req : Request, res : Response) => {
 
@@ -11,39 +12,43 @@ const sendMessage = async (req : Request, res : Response) => {
         const { id: receiverId } = req.params;
         const senderId = req.user._id;
 
+        const userToUpdate = await User.findByIdAndUpdate(senderId, {$pull : {notInConversation : receiverId}});
+        await userToUpdate.save();
+
         let conversation = await Conversation.findOne({
-            participants : {$all : [senderId, receiverId]}
+            participants : {$all: [senderId, receiverId]}
         });
 
         if(!conversation) {
-
             conversation = await Conversation.create({
                 participants : [senderId, receiverId]
             });
+
+            await User.findByIdAndUpdate(senderId, {$push : {conversations : conversation._id}});
+            await User.findByIdAndUpdate(receiverId, {$push : {conversations : conversation._id}});
         }
 
-        const newMessage = new Message({senderId, receiverId, message});
-        
-        if(newMessage) {
-            conversation.message.push(newMessage._id);
-        }
-        
-        await User.findByIdAndUpdate(receiverId, {
-            $push : {conversations : conversation._id}
-        })
+        const newMessage = new Message({
+            senderId,
+            receiverId,
+            message
+        });
 
         await Promise.all([conversation.save(), newMessage.save()]);
 
         const receiverSocketId = getReceiverSocketId(receiverId);
-        if (receiverSocketId) {
-            io.to(receiverSocketId).emit("newMessage", newMessage);
-        }
+		if (receiverSocketId) {
+
+			io.to(receiverSocketId).emit('newMessage', newMessage);
+            io.to(receiverSocketId).emit('notification', { message : 'new message' });
+		}
 
         res.status(201).json(newMessage);
 
     } catch (error) {
         
         console.log(`error in sendMessage controller :`, error);
+        
         res.status(500).json({error : 'Internal server error'});
     }
 
@@ -68,6 +73,7 @@ const getMessages = async (req : Request, res : Response) => {
     } catch (error) {
 
         console.log('Error in getMessages Controller :', error);
+
         res.status(500).json({error : 'internal server error'});
     }
 

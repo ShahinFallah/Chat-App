@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { IMessage } from '../types/types'
 
-const messageSchema = new mongoose.Schema({
+const messageSchema = new mongoose.Schema<IMessage>({
 
     senderId : {
         type : mongoose.Schema.Types.ObjectId,

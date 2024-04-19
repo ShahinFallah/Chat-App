@@ -4,14 +4,12 @@ import User from '../models/userModel';
 import Conversation from '../models/conversationM';
 import Message from '../models/messageModel';
 
-const searchUser = async (req : Request, res : Response) => {
+export const searchUser = async (req : Request, res : Response) => {
 
     try {
         const { query } = req.params;
 
         const users = await User.find({_id : {$ne : req.user._id}, username: { $regex: query, $options: 'i' } }).select('username fullName profilePic');
-
-        // const matchingUsernames = users.map(user => [user._id, user.username]);
 
         res.status(200).json(users);
 
@@ -24,71 +22,14 @@ const searchUser = async (req : Request, res : Response) => {
 
 }
 
-const blockUser = async (req : Request, res : Response) => {
+export const AddConversation = async (req : Request, res : Response) => {
 
     try {
-        const { id } = req.params;
+        const user = await User.findById(req.params.id);
 
-        const userToModify = await User.findById(id);
-        const currentUser = await User.findById(req.user._id);
+        if(!user) return res.status(400).json({error : 'User not found'});
 
-        if(id === req.user._id.toString()) return res.status(400).json({error : 'You cannot block or unBlock yourself'});
-
-        const isBlock = currentUser.blockedUsers.includes(userToModify._id);
-
-        if(isBlock) {
-
-            await User.findByIdAndUpdate(req.user._id, {$pull : {blockedUsers : userToModify._id}});
-
-            res.status(200).json({status : true, message : 'User has been unBlocked'});
-        }else {
-
-            await User.findByIdAndUpdate(req.user._id, {$push : {blockedUsers : userToModify._id}});
-
-            res.status(200).json({status : true, message : 'User has been blocked'});
-        }
-
-    } catch (error) {
-        
-        console.log('error in block controller', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-
-}
-
-const AddConversation = async (req : Request, res : Response) => {
-
-    try {
-        const userToModify = await User.findById(req.params.id).select('-password');
-        const currentUser = await User.findById(req.user._id);
-        // const conversationMessages = await Message.findOne({
-
-        //     senderId : currentUser,
-        //     receiverId : userToModify
-            
-        // }).sort({createdAt : -1}).limit(1);
-        
-        if(userToModify._id.toString() === currentUser._id.toString()) return res.status(400).json({error : 'you cannot start conversation with yourself'});
-
-        const isHaveConversation = currentUser.conversations.includes(userToModify._id);
-
-        if(!isHaveConversation) {
-
-            let conversation = await Conversation.findOne({
-                participants : {$all : [currentUser._id, userToModify._id]}
-            });
-
-            if(!conversation) {
-
-                conversation = await Conversation.create({
-                    participants : [currentUser._id, userToModify._id]
-                });
-            }
-
-            await User.findByIdAndUpdate(req.user._id, {$push : {conversations : conversation._id}});
-
-            res.status(200).json({_id : userToModify._id, fullName : userToModify.fullName, username : userToModify.username, profilePic : userToModify.profilePic});
-        }
+        res.status(200).json({_id : user._id, fullName : user.fullName, username : user.username, profilePic : user.profilePic});
 
     } catch (error) {
         
@@ -99,7 +40,7 @@ const AddConversation = async (req : Request, res : Response) => {
 
 }
 
-const getUserConversations = async (req : Request, res : Response) => {
+export const getUserConversations = async (req : Request, res : Response) => {
     try {
         const userId = req.user._id;
 
@@ -131,7 +72,7 @@ const getUserConversations = async (req : Request, res : Response) => {
     }
 }
 
-const deleteConversation = async (req : Request, res : Response) => {
+export const deleteConversation = async (req : Request, res : Response) => {
 
     try {
         const { id: userToModify } = req.params;
@@ -165,9 +106,8 @@ const deleteConversation = async (req : Request, res : Response) => {
     } catch (error) {
         
         console.log('error in deleteConversation controller :', error);
+
+        res.status(500).json({error : 'Internal server error'});
     }
 
 }
-
-
-export { searchUser, blockUser, AddConversation, getUserConversations, deleteConversation }; 

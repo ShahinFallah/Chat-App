@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { IUser } from '../types/types'
 
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema<IUser>({
 
     fullName : {
         type : String,
@@ -30,10 +30,10 @@ const userSchema = new mongoose.Schema({
         type : String,
         default : ''
     },
-    // isBlock : {
-    //     type : Boolean,
-    //     default : false
-    // },
+    isFreeze : {
+        type : Boolean,
+        default : false
+    },
     blockedUsers : [{
         type : mongoose.Schema.Types.ObjectId,
         ref : 'User',

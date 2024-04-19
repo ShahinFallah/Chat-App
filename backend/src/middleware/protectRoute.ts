@@ -11,7 +11,7 @@ const protectRoute = async (req : Request, res : Response, next : NextFunction) 
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
 
-        if(!decoded) return res.status(401).json({error : 'Unauthorized - No Token Provided'});
+        if(!decoded) return res.status(401).json({error : 'Token is not valid'});
 
         const user = await User.findById(decoded.userId).select('-password');
 

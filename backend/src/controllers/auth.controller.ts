@@ -1,12 +1,10 @@
-import User from '../models/userModel';
-import Conversation from '../models/conversationM';
-// import Message from '../models/messageModel.js';
 import bcrypt from 'bcryptjs';
 import generateTokenAndSetCookie from '../utils/generateToken';
 import { Request, Response } from 'express';
 
+import User from '../models/userModel';
 
-const signup = async (req : Request, res : Response) => {
+export const signup = async (req : Request, res : Response) => {
 
     try {
         const { fullName, username, confirmPassword, password, gender } = req.body;
@@ -21,11 +19,10 @@ const signup = async (req : Request, res : Response) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         const user = new User({
-
             fullName,
             username,
-            password : hashedPassword,
-            gender
+            gender,
+            password : hashedPassword
         });
 
         if(user) {
@@ -42,12 +39,13 @@ const signup = async (req : Request, res : Response) => {
     } catch (error) {
         
         console.log('error in signup controller', error);
+
         res.status(500).json({error : 'internal server error'});
     }
 
 }
 
-const login = async (req : Request, res : Response) => {
+export const login = async (req : Request, res : Response) => {
 
     try {
         const { username, password } = req.body;
@@ -57,6 +55,8 @@ const login = async (req : Request, res : Response) => {
 
         if(!user || !isPassword) return res.status(400).json({error : 'Invalid username or password'});
 
+        if(user.isFreeze == true) user.isFreeze = false;
+
         generateTokenAndSetCookie(user._id.toString(), res);
 
         res.status(200).json({_id : user._id, fullName : user.fullName, username : user.username});
@@ -64,12 +64,13 @@ const login = async (req : Request, res : Response) => {
     } catch (error) {
         
         console.log('error in login controller', error);
+
         res.status(500).json({error : 'internal server error'});
     }
     
 }
 
-const logout = async (req : Request, res : Response) => {
+export const logout = async (req : Request, res : Response) => {
 
     try {
         res.cookie('jwt', '', {maxAge : 1});
@@ -79,70 +80,28 @@ const logout = async (req : Request, res : Response) => {
     } catch (error) {
 
         console.log('error in logout controller', error);
+
         res.status(500).json({error : 'internal server error'});
     }
 
 }
 
-const getProfile = async (req : Request, res : Response) => {
+export const freezeAccount = async (req : Request, res : Response) => {
 
     try {
-        const { id } = req.params;
+        res.cookie('jwt', '', {maxAge : 1});
 
-        const user = await User.findById(id).select('-password');
+        const freeze = await User.findByIdAndUpdate(req.user._id, {isFreeze : true});
 
-        if(!user) return res.status(404).json({error : 'User not found'});
+        await freeze.save();
 
-        res.status(200).json(user);
+        res.status(200).json({message : 'Account has been freezed'});
 
     } catch (error) {
         
-        console.log('error in getProfile controller', error);
-        res.status(500).json({error : 'internal server error'});
-    }
-
-}
-
-const updateUser = async (req : Request, res : Response) => {
-
-    try {
-        const { fullName, username, password, gender, bio } = req.body;
-        const { profilePic } = req.body;
-
-        const userId = req.user._id;
-
-        let user = await User.findById(userId);
-
-        if(!user) return res.status(404).json({error : 'User not found'});
-
-        if(req.params.id !== userId.toString()) return res.status(400).json({error : 'You cannot change other users profile'});
-
-        if(password) {
-
-            const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(password, salt);
-
-            user.password = hashedPassword;
-        }
-
-        // profile api
-
-        user.fullName = fullName || user.fullName;
-        user.username = username || user.username;
-        user.gender = gender || user.gender;
-        user.bio = bio || user.bio;
-
-        await user.save();
-
-        res.status(200).json({user});
-
-    } catch (error) {
+        console.log('error in freezeAccount controller', error);
         
-        console.log('error in updateUser controller', error);
         res.status(500).json({error : 'internal server error'});
     }
 
 }
-
-
-export { signup, login, logout, getProfile, updateUser }
