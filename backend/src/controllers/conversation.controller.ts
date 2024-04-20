@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { client } from '../config/redis';
+import { client } from '../config/redis.js';
 
 import User from '../models/userModel';
 import Conversation from '../models/conversationM';
@@ -12,8 +12,7 @@ export const searchUser = async (req : Request, res : Response) => {
 
         const users = await User.find({_id : {$ne : req.user._id}, username: { $regex: query, $options: 'i' } }).select('username fullName profilePic').limit(5);
 
-        await client.set(query, JSON.stringify(users));
-        await client.expire(query, 240);
+        await client.setex(query, 5, JSON.stringify(users));
 
         res.status(200).json(users);
 
@@ -67,8 +66,7 @@ export const getUserConversations = async (req : Request, res : Response) => {
             }}
         ]);
 
-        await client.set(id, JSON.stringify(conversations));
-        await client.expire(id, 60);
+        await client.setex(id, 5, JSON.stringify(conversations));
 
         res.status(200).json(conversations);
 

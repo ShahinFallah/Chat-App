@@ -1,8 +1,10 @@
 import bcrypt from 'bcryptjs';
 import generateTokenAndSetCookie from '../utils/generateToken';
 import { Request, Response } from 'express';
+import { client } from '../config/redis.js';
 
 import User from '../models/userModel';
+
 
 export const signup = async (req : Request, res : Response) => {
 
@@ -29,6 +31,8 @@ export const signup = async (req : Request, res : Response) => {
 
             generateTokenAndSetCookie(user._id.toString(), res);
             await user.save();
+
+            await client.setex(JSON.stringify(user._id), 240, JSON.stringify(user));
 
             res.status(201).json({_id : user._id, fullName : user.fullName, username : user.username});
 
@@ -58,6 +62,8 @@ export const login = async (req : Request, res : Response) => {
         if(user.isFreeze == true) user.isFreeze = false;
 
         generateTokenAndSetCookie(user._id.toString(), res);
+
+        await client.setex(JSON.stringify(user._id), 240, JSON.stringify(user));
 
         res.status(200).json({_id : user._id, fullName : user.fullName, username : user.username});
 
@@ -93,7 +99,7 @@ export const freezeAccount = async (req : Request, res : Response) => {
 
         const freeze = await User.findByIdAndUpdate(req.user._id, {isFreeze : true});
 
-        await freeze.save();
+        await freeze!.save();
 
         res.status(200).json({message : 'Account has been freezed'});
 

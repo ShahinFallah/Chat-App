@@ -1,5 +1,4 @@
-import mongoose, { ObjectId } from 'mongoose';
-import { Request } from 'express';
+import mongoose, { Document } from 'mongoose';
 import { JwtPayload } from 'jsonwebtoken';
 
 declare global {

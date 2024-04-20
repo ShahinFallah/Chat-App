@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
-import { client } from '../config/redis';
+import { client } from '../config/redis.js';
 
 import User from '../models/userModel';
 
@@ -15,9 +15,6 @@ export const getProfile = async (req : Request, res : Response) => {
         if(user.isFreeze == true) return res.status(400).json({message : 'This Account is freezed'});
     
         if(!user) return res.status(404).json({error : 'User not found'});
-    
-        await client.set(user._id.toString(), JSON.stringify(user));
-        await client.expire(user._id.toString(), 45);
             
         res.status(200).json(user);
 
@@ -60,6 +57,8 @@ export const updateUser = async (req : Request, res : Response) => {
         user.bio = bio || user.bio;
 
         await user.save();
+
+        await client.setex(JSON.stringify(user._id), 240, JSON.stringify(user));
 
         res.status(200).json({user});
 

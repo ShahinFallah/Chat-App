@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { getReceiverSocketId, io } from '../socket/socket';
+import { client } from '../config/redis.js';
 
 import Message from '../models/messageModel';
 import User from '../models/userModel';
@@ -66,6 +67,8 @@ const getMessages = async (req : Request, res : Response) => {
         if(!conversation) return res.status(400).json([]);
 
         const message = conversation.message;
+
+        await client.setex(userToChat, 5, JSON.stringify(message));
 
         res.status(200).json(message);
 
