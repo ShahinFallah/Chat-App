@@ -1,7 +1,7 @@
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 import generateTokenAndSetCookie from '../utils/generateToken';
 import { Request, Response } from 'express';
-import { client } from '../config/redis.js';
+import { client } from '../config/redis';
 
 import User from '../models/userModel';
 

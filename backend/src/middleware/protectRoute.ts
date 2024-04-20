@@ -1,6 +1,7 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import User from '../models/userModel';
 import { Response, Request, NextFunction } from 'express';
+import { IUser } from '../types/types';
 
 const protectRoute = async (req : Request, res : Response, next : NextFunction) => {
 
@@ -13,7 +14,7 @@ const protectRoute = async (req : Request, res : Response, next : NextFunction) 
 
         if(!decoded) return res.status(401).json({error : 'Token is not valid'});
 
-        const user = await User.findById(decoded.userId).select('-password');
+        const user = await User.findById<IUser>(decoded.userId).select('-password');
 
         if(!user) return res.status(400).json({error : 'User not found'});
 

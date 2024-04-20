@@ -1,9 +1,11 @@
 import { Request, Response } from 'express';
-import { client } from '../config/redis.js';
+import { getReceiverSocketId, io } from '../socket/socket';
 
 import User from '../models/userModel';
 import Conversation from '../models/conversationM';
 import Message from '../models/messageModel';
+import { ConversationDocument, ConversationParticipant, IUser } from '../types/types';
+
 
 export const searchUser = async (req : Request, res : Response) => {
 
@@ -11,8 +13,6 @@ export const searchUser = async (req : Request, res : Response) => {
         const { query } = req.params;
 
         const users = await User.find({_id : {$ne : req.user._id}, username: { $regex: query, $options: 'i' } }).select('username fullName profilePic').limit(5);
-
-        await client.setex(query, 5, JSON.stringify(users));
 
         res.status(200).json(users);
 
@@ -45,28 +45,29 @@ export const AddConversation = async (req : Request, res : Response) => {
 
 export const getUserConversations = async (req : Request, res : Response) => {
     try {
-        const { id } = req.params; // for redis
-        const userId = req.user._id;
+        const userId : string = req.user._id;
 
         const conversations = await Conversation.aggregate([
+
             { $match: { participants: userId } },
             { $lookup: {
+
                 from: "users",
                 localField: "participants",
                 foreignField: "_id",
                 as: "participantsInfo"
             }},
+
             { $unwind: "$participantsInfo" },
             { $match: { "participantsInfo._id": { $ne: userId } } },
             { $project: { 
+
                 _id: "$participantsInfo._id",
                 fullName: "$participantsInfo.fullName",
                 username: "$participantsInfo.username",
                 profilePic: "$participantsInfo.profilePic"
             }}
         ]);
-
-        await client.setex(id, 5, JSON.stringify(conversations));
 
         res.status(200).json(conversations);
 
@@ -78,11 +79,15 @@ export const getUserConversations = async (req : Request, res : Response) => {
     }
 }
 
+
+
+
+
 export const deleteConversation = async (req : Request, res : Response) => {
 
     try {
         const { id: userToModify } = req.params;
-        const currentUser = req.user._id;
+        const currentUser : string = req.user._id;
 
         const conversation = await Conversation.findOneAndDelete({
             participants : {$all: [currentUser, userToModify]}
@@ -92,8 +97,35 @@ export const deleteConversation = async (req : Request, res : Response) => {
            $or : [{ senderId : currentUser, receiverId : userToModify}]
         });
 
-        await User.findByIdAndUpdate(currentUser, {$pull : {conversations : conversation._id}});
-        await User.findByIdAndUpdate(userToModify, {$pull : {conversations : conversation._id}});
+        await User.findByIdAndUpdate<IUser>(currentUser, {$pull : {conversations : conversation._id}});
+        await User.findByIdAndUpdate<IUser>(userToModify, {$pull : {conversations : conversation._id}});
+
+        const conversations = await Conversation.find({
+            participants: userToModify,
+            _id: { $ne: conversation._id }
+
+        }).populate('participants', 'profilePic username fullName').select('participants -_id');
+        
+        const mappedConversations = conversations.map((conversation: ConversationDocument) => {
+
+            const participant = conversation.participants.find((participant: ConversationParticipant) => participant._id.toString() != userToModify);
+
+            return {
+                _id: participant._id,
+                username: participant.username,
+                fullName: participant.fullName,
+                profilePic: participant.profilePic
+            };
+        });
+
+        const receiverSocketId = getReceiverSocketId(userToModify);
+        if(receiverSocketId) {
+
+            io.to(receiverSocketId).emit('deleted', {
+                conversations : mappedConversations,
+                deletedId : userToModify
+            });
+        }
 
         res.status(200).json({message : 'deleted'});
 

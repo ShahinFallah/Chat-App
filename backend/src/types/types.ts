@@ -1,4 +1,4 @@
-import mongoose, { Document } from 'mongoose';
+import { Document, ObjectId } from 'mongoose';
 import { JwtPayload } from 'jsonwebtoken';
 
 declare global {
@@ -10,25 +10,38 @@ declare global {
 }
 
 export interface IUser extends Document {
-    fullName : string
-    username : string
-    password : string
-    gender : string
-    profilePic : string
-    bio : string
-    isFreeze : boolean
-    blockedUsers : mongoose.Types.ObjectId[]
-    notInConversation : mongoose.Types.ObjectId[]
-    conversations : mongoose.Types.ObjectId[]
+    fullName? : string
+    username? : string
+    password? : string
+    gender? : string
+    profilePic? : string
+    bio? : string
+    isFreeze? : boolean
+    blockedUsers? : ObjectId[]
+    notInConversation? : ObjectId[]
+    conversations? : ObjectId[]
 };
 
 export interface IMessage extends Document {
-    senderId : mongoose.Types.ObjectId
-    receiverId : mongoose.Types.ObjectId
+    senderId : ObjectId
+    receiverId : ObjectId
     message : string
 };
 
-export interface IConversation extends Document {
-    participants : mongoose.Types.ObjectId[]
-    message : mongoose.Types.ObjectId[]
+export interface ConversationParticipant extends IUser {
+    fullName? : string
+    username? : string
+    password? : string
+    gender? : string
+    profilePic? : string
+    bio? : string
+    isFreeze? : boolean
+    blockedUsers? : ObjectId[]
+    notInConversation? : ObjectId[]
+    conversations? : ObjectId[]
+}
+
+export interface ConversationDocument extends Document {
+    participants: ConversationParticipant[];
+    message : ObjectId[]
 }

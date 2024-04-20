@@ -12,7 +12,7 @@ const io = new Server(server, {
     }
 });
 
-export const getReceiverSocketId = (receiverId : any) => {
+export const getReceiverSocketId = (receiverId : string) => {
     return userSocketMap[receiverId];
 };
 
@@ -20,7 +20,7 @@ const userSocketMap = <any>{};
 
 io.on('connection', (socket : any) => {
 
-    const userId : any = socket.handshake.query.userId;
+    const userId : string = socket.handshake.query.userId;
     if(userId != 'undefined') userSocketMap[userId] = socket.id;
 
     io.emit('getOnlineUsers', Object.keys(userSocketMap));

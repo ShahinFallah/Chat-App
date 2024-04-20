@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import User from '../models/userModel';
 import { Request, Response, Router } from 'express';
-import bcrypt, { hash } from 'bcryptjs';
+import bcrypt from 'bcrypt';
 
 const router = Router();
 

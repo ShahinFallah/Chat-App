@@ -1,20 +1,21 @@
 import { Request, Response } from 'express';
 import { getReceiverSocketId, io } from '../socket/socket';
-import { client } from '../config/redis.js';
 
 import Message from '../models/messageModel';
 import User from '../models/userModel';
 import Conversation from '../models/conversationM';
+import { ConversationDocument, ConversationParticipant, IUser } from '../types/types';
+
 
 const sendMessage = async (req : Request, res : Response) => {
 
     try {
         const { message } = req.body;
         const { id: receiverId } = req.params;
-        const senderId = req.user._id;
+        const senderId : string = req.user._id;
 
-        let conversation = await Conversation.findOne({
-            participants : {$all: [senderId, receiverId]}
+        let conversation = await Conversation.findOne<ConversationDocument>({
+            participants: { $all: [senderId, receiverId] }
         });
 
         if(!conversation) {
@@ -22,8 +23,26 @@ const sendMessage = async (req : Request, res : Response) => {
                 participants : [senderId, receiverId]
             });
 
-            await User.findByIdAndUpdate(senderId, {$push : {conversations : conversation._id}});
-            await User.findByIdAndUpdate(receiverId, {$push : {conversations : conversation._id}});
+            await User.findByIdAndUpdate<IUser>(senderId, {$push : {conversations : conversation._id}});
+            await User.findByIdAndUpdate<IUser>(receiverId, {$push : {conversations : conversation._id}});
+
+            await conversation.save();
+
+            const conversations = await Conversation.findOne<ConversationDocument>({
+
+                participants: { $all: [senderId, receiverId] }
+
+            }).populate('participants', 'username profilePic fullName').select('participants');
+            
+            if (conversations) {
+                conversations.participants = conversations.participants.filter((participant : ConversationParticipant) => participant._id.toString() !== senderId.toString());
+            
+                const receiverSocketId : string = getReceiverSocketId(receiverId);
+
+                if (receiverSocketId) {
+                    io.to(receiverSocketId).emit('newConversation', conversations.participants);
+                }
+            }
         }
 
         const newMessage = new Message({
@@ -36,11 +55,10 @@ const sendMessage = async (req : Request, res : Response) => {
 
         await Promise.all([conversation.save(), newMessage.save()]);
 
-        const receiverSocketId = getReceiverSocketId(receiverId);
+        const receiverSocketId : string = getReceiverSocketId(receiverId);
 		if (receiverSocketId) {
 
 			io.to(receiverSocketId).emit('newMessage', newMessage);
-            io.to(receiverSocketId).emit('notification', { message : 'new message' });
 		}
 
         res.status(201).json(newMessage);
@@ -58,7 +76,7 @@ const getMessages = async (req : Request, res : Response) => {
 
     try {
         const { id: userToChat } = req.params;
-        const senderId = req.user._id;
+        const senderId : string = req.user._id;
 
         const conversation = await Conversation.findOne({
             participants : {$all : [senderId, userToChat]}
@@ -67,8 +85,6 @@ const getMessages = async (req : Request, res : Response) => {
         if(!conversation) return res.status(400).json([]);
 
         const message = conversation.message;
-
-        await client.setex(userToChat, 5, JSON.stringify(message));
 
         res.status(200).json(message);
 
