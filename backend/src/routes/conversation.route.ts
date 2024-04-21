@@ -4,7 +4,7 @@ import protectRoute from '../middleware/protectRoute';
 
 const router = Router();
 
-router.get('/:id', protectRoute, getUserConversations);
+router.get('/', protectRoute, getUserConversations);
 
 router.get('/search/:query', protectRoute, searchUser);
 

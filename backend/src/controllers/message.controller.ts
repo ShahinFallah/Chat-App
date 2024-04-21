@@ -31,7 +31,7 @@ const sendMessage = async (req : Request, res : Response) => {
             }).populate('participants', 'username profilePic fullName').select('participants');
             
             if (conversations) {
-                conversations.participants = conversations.participants.filter((participant : ConversationParticipant) => participant._id.toString() !== senderId.toString());
+                conversations.participants = conversations.participants.filter((participant : ConversationParticipant) => participant._id.toString() !== receiverId.toString());
             
                 const receiverSocketId : string = getReceiverSocketId(receiverId);
 
