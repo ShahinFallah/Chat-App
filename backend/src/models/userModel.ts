@@ -38,11 +38,6 @@ const userSchema = new mongoose.Schema<IUser>({
         type : mongoose.Schema.Types.ObjectId,
         ref : 'User',
         default : []
-    }],
-    conversations : [{
-        type : mongoose.Schema.Types.ObjectId,
-        ref : 'Conversation',
-        default : []
     }]
 
 }, {timestamps : true});

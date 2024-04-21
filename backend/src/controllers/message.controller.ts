@@ -2,9 +2,8 @@ import { Request, Response } from 'express';
 import { getReceiverSocketId, io } from '../socket/socket';
 
 import Message from '../models/messageModel';
-import User from '../models/userModel';
 import Conversation from '../models/conversationM';
-import { ConversationDocument, ConversationParticipant, IUser } from '../types/types';
+import { ConversationDocument, ConversationParticipant } from '../types/types';
 
 
 const sendMessage = async (req : Request, res : Response) => {
@@ -22,9 +21,6 @@ const sendMessage = async (req : Request, res : Response) => {
             conversation = await Conversation.create({
                 participants : [senderId, receiverId]
             });
-
-            await User.findByIdAndUpdate<IUser>(senderId, {$push : {conversations : conversation._id}});
-            await User.findByIdAndUpdate<IUser>(receiverId, {$push : {conversations : conversation._id}});
 
             await conversation.save();
 

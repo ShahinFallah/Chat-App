@@ -4,7 +4,7 @@ import { getReceiverSocketId, io } from '../socket/socket';
 import User from '../models/userModel';
 import Conversation from '../models/conversationM';
 import Message from '../models/messageModel';
-import { ConversationDocument, ConversationParticipant, IUser } from '../types/types';
+import { ConversationDocument, ConversationParticipant } from '../types/types';
 
 
 export const searchUser = async (req : Request, res : Response) => {
@@ -47,29 +47,23 @@ export const getUserConversations = async (req : Request, res : Response) => {
     try {
         const userId : string = req.user._id;
 
-        const conversations = await Conversation.aggregate([
+        const conversations = await Conversation.find({
+            participants : userId
+        }).populate('participants', 'username fullName profilePic');
 
-            { $match: { participants: userId } },
-            { $lookup: {
+        const mappedConversations = conversations.map((conversations : ConversationDocument) => {
 
-                from: "users",
-                localField: "participants",
-                foreignField: "_id",
-                as: "participantsInfo"
-            }},
+            const participants = conversations.participants.find((participants : ConversationParticipant) => participants._id.toString() != userId);
 
-            { $unwind: "$participantsInfo" },
-            { $match: { "participantsInfo._id": { $ne: userId } } },
-            { $project: { 
+            return {
+                _id : participants._id,
+                fullName : participants.fullName,
+                username : participants.username,
+                profilePic : participants.profilePic
+            }
+        });
 
-                _id: "$participantsInfo._id",
-                fullName: "$participantsInfo.fullName",
-                username: "$participantsInfo.username",
-                profilePic: "$participantsInfo.profilePic"
-            }}
-        ]);
-
-        res.status(200).json(conversations);
+        res.status(200).json(mappedConversations);
 
     } catch (error) {
 
@@ -78,10 +72,6 @@ export const getUserConversations = async (req : Request, res : Response) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 }
-
-
-
-
 
 export const deleteConversation = async (req : Request, res : Response) => {
 
@@ -96,9 +86,6 @@ export const deleteConversation = async (req : Request, res : Response) => {
         await Message.deleteMany({
            $or : [{ senderId : currentUser, receiverId : userToModify}]
         });
-
-        await User.findByIdAndUpdate<IUser>(currentUser, {$pull : {conversations : conversation._id}});
-        await User.findByIdAndUpdate<IUser>(userToModify, {$pull : {conversations : conversation._id}});
 
         const conversations = await Conversation.find({
             participants: userToModify,
@@ -123,7 +110,7 @@ export const deleteConversation = async (req : Request, res : Response) => {
 
             io.to(receiverSocketId).emit('deleted', {
                 conversations : mappedConversations,
-                deletedId : userToModify
+                deletedId : currentUser
             });
         }
 
