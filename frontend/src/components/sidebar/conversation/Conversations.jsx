@@ -2,10 +2,28 @@ import Conversation from "./Conversation"
 // import { IoAddCircleOutline } from "react-icons/io5";
 import useGetConversation from "../../../hooks/useGetConversation";
 import useConversations from "../../../zustand/useConversations"
+import { useSocketContext } from "../../../context/SocketContext";
+import useChatConversationsHandles from '../../../zustand/useChatConversationHandler'
 
 function Conversations() {
   const { loading: getLoading } = useGetConversation()
-  const { conversations, addConLoading } = useConversations()
+  const { addConversations, conversations, addConLoading } = useConversations()
+  const { socket } = useSocketContext()
+  const { selectedConversation, setSelectedConversation } = useChatConversationsHandles()
+  
+  socket?.on('newConversation', con => {
+    addConversations([...conversations, ...con])
+    console.log(con)
+  })
+
+
+  socket?.on('deleted', ({ conversations:con, deletedId }) => {
+    if (selectedConversation?._id === deletedId) setSelectedConversation(null);
+
+    addConversations(con)
+  })
+
+
   return (
     <>
       {addConLoading && (

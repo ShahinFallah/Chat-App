@@ -10,8 +10,7 @@ function useSendMessage() {
     const sendMessage = async message => {
         if (!message) return
 
-        if (selectedConversation.conversationState) selectedConversation.conversationState = false
-
+        
         setLoading(true)
         try {
             const res = await fetch(`api/messages/send/${selectedConversation._id}`, {
@@ -19,10 +18,11 @@ function useSendMessage() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ message })
             })
-
+            
             const data = await res.json()
             if (data.error) throw new Error(data.error);
-
+            
+            if (selectedConversation.conversationState) selectedConversation.conversationState = false
             setMessage([...messages, data])
 
         } catch (error) {

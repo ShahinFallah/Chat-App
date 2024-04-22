@@ -2,10 +2,13 @@ import Message from "./Message"
 import useGetMessages from '../../../hooks/useGetMessages'
 import { useEffect, useRef } from "react"
 import chatConversationHandler from '../../../zustand/useChatConversationHandler'
+import useListenMessages from "../../../hooks/useListenMessages"
+
 function Messages() {
   const { messages, loading } = useGetMessages()
   const lastMessageRef = useRef()
   const { selectedConversation } = chatConversationHandler()
+  useListenMessages()
 
 
   useEffect(() => {

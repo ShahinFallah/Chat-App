@@ -16,6 +16,7 @@ function Conversation({ conversationData }) {
     const handleDelete = async e => {
         e.stopPropagation()
 
+        if (selectedConversation?._id === conversationData._id) setSelectedConversation(null)
         if (conversationData.conversationState) {
             return addConversations(conversations.filter(conversation => conversation._id !== conversationData._id))
         }

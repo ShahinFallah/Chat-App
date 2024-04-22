@@ -19,7 +19,6 @@ function useDeleteConversation() {
 
             addConversations(conversations.filter(conversation => conversation._id !== id))
 
-            if (selectedConversation?._id === id) setSelectedConversation(null)
         } catch (error) {
             toast.error(error.message)
         } finally {
