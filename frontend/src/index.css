@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .home-bg-color {
-    background: radial-gradient(at 70% 111%,#252653 0%,#171e2b 50% );
+    background: radial-gradient(at 70% 111%, #252653 0%, #171e2b 50%);
 }
 
 * {
@@ -41,11 +41,23 @@
     text-shadow: 0 5px 10px #4d648d8a;
 }
 
+.visibleNotif {
+    animation: notifVisible 0.3s;
+}
+
+
 @keyframes add-conversation-loading {
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
+    }
+}
+
+@keyframes notifVisible {
+    from {
+        transform: translateX(-280px);
     }
 }

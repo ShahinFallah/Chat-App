@@ -1,10 +1,11 @@
 import { create } from "zustand"
 
-const chatConversationHandler = create(set => ({
+const useChatConversationHandler = create(set => ({
+    
     selectedConversation: null,
     setSelectedConversation: conversation => set({ selectedConversation: conversation }),
     messages: [],
     setMessage: message => set(() => ({ messages: message }))
 }))
 
-export default chatConversationHandler
+export default useChatConversationHandler

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import chatConversationHandler from '../zustand/useChatConversationHandler'
 import toast from 'react-hot-toast';
+import popSound from '../assets/sounds/pop.mp3'
 
 function useSendMessage() {
     const { selectedConversation, messages, setMessage } = chatConversationHandler()
@@ -23,7 +24,12 @@ function useSendMessage() {
             if (data.error) throw new Error(data.error);
             
             if (selectedConversation.conversationState) selectedConversation.conversationState = false
+
+            const pop = new Audio(popSound)
+            
             setMessage([...messages, data])
+            pop.volume = 0.5
+            pop.play()
 
         } catch (error) {
             toast.error(error.message)

@@ -17,7 +17,12 @@ function App() {
           <Route path='signup' element={userAuth ? <Navigate to='/' /> : <SignUp />} />
         </Routes>
 
-        <div><Toaster /></div>
+        <div>
+          <Toaster
+            position='top-left'
+            reverseOrder={false}
+          />
+        </div>
       </div>
     </>
   )

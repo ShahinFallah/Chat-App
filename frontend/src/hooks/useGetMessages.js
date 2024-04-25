@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import chatConversationHandler from '../zustand/useChatConversationHandler'
+import useUnreadMessages from '../zustand/unreadMessages'
 
 function useGetMessages() {
     const { selectedConversation, messages, setMessage } = chatConversationHandler()
     const [loading, setLoading] = useState(false)
+    const { deleteUnreadMessages } = useUnreadMessages()
 
     useEffect(() => {
         if (selectedConversation.conversationState) {
@@ -33,6 +35,7 @@ function useGetMessages() {
         }
         
         getMessages(selectedConversation._id)
+        deleteUnreadMessages(selectedConversation._id)
 
         return () => (isMounted = false);
     }, [selectedConversation])

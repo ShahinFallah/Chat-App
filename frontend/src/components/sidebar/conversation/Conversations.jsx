@@ -1,31 +1,29 @@
-import Conversation from "./Conversation"
 // import { IoAddCircleOutline } from "react-icons/io5";
+import Conversation from "./Conversation"
 import useGetConversation from "../../../hooks/useGetConversation";
 import useConversations from "../../../zustand/useConversations"
-import { useSocketContext } from "../../../context/SocketContext";
-import useChatConversationsHandles from '../../../zustand/useChatConversationHandler'
+import useListenConversation from "../../../hooks/useListenConversation";
+import useListenDelete from "../../../hooks/useListenDelete";
+import Notification from '../../notification/Notification'
+import useListenMessages from "../../../hooks/useListenMessages"
 
 function Conversations() {
   const { loading: getLoading } = useGetConversation()
-  const { addConversations, conversations, addConLoading } = useConversations()
-  const { socket } = useSocketContext()
-  const { selectedConversation, setSelectedConversation } = useChatConversationsHandles()
-  
-  socket?.on('newConversation', con => {
-    addConversations([...conversations, ...con])
-    console.log(con)
-  })
+  const { conversations, addConLoading } = useConversations()
+  const { notification } = useListenMessages()
 
+  useListenConversation()
 
-  socket?.on('deleted', ({ conversations:con, deletedId }) => {
-    if (selectedConversation?._id === deletedId) setSelectedConversation(null);
-
-    addConversations(con)
-  })
-
+  useListenDelete()
 
   return (
     <>
+
+      {
+        notification &&
+        <Notification data={notification} />
+      }
+
       {addConLoading && (
         <div className="fixed add-conversation-loading backdrop-blur-md inset-0 z-50 flex justify-center items-center ">
           <span className="loading loading-ring size-14"></span>
@@ -49,6 +47,7 @@ function Conversations() {
     </>
   )
 }
+
 
 const noConversation = () => {
   return (
