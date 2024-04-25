@@ -4,6 +4,7 @@ import useChatConversationHandler from '../../../zustand/useChatConversationHand
 import { useSocketContext } from "../../../context/SocketContext";
 import useConversations from "../../../zustand/useConversations"
 import useUnreadMessages from "../../../zustand/unreadMessages";
+import showNameInProfile from "../../../utils/showNameInProfile";
 
 function Conversation({ conversationData }) {
     const { loading: deleteLoading, deleteConversation } = useDeleteConversation()
@@ -76,12 +77,6 @@ function Conversation({ conversationData }) {
             }
         </div>
     )
-}
-
-export const showNameInProfile = (name) => {
-    const fullName = name.split(" ")
-    const result = fullName.length > 1 ? `${fullName[0].charAt(0)}${fullName[1].charAt(0)}` : fullName[0].charAt(0)
-    return result.toUpperCase()
 }
 
 export default Conversation

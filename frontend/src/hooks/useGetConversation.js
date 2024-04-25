@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import useConversations from "../zustand/useConversations"
-import { useAuthContext } from "../context/AuthContext"
 
 function useGetConversation() {
-    const { userAuth } = useAuthContext()
-    
     const [loading, setLoading] = useState(false)
     const { conversations, addConversations } = useConversations()
 

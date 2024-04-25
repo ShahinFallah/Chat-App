@@ -8,12 +8,12 @@ function Message({ message }) {
     return (
             fromMe ?
             <div className="chat chat-end">
-                <div className="chat-bubble bg-bubble_start_color text-text_color">{message.message}</div>
+                <div className="chat-bubble bg-bubble_start_color text-text_color break-words max-w-[75%]">{message.message}</div>
             </div>
             :
             
             <div className="chat chat-start">
-                <div className="chat-bubble bg-bubble_end_color bg-opacity-70">{message.message}</div>
+                <div className="chat-bubble bg-bubble_end_color bg-opacity-70 break-words max-w-[75%]">{message.message}</div>
             </div>
     )
 }

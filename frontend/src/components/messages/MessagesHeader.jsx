@@ -1,7 +1,7 @@
 import { IoCallOutline } from "react-icons/io5";
 import { CiVideoOn } from "react-icons/ci";
 import chatConversationHandler from '../../zustand/useChatConversationHandler'
-import { showNameInProfile } from '../sidebar/conversation/Conversation'
+import showNameInProfile from '../sidebar/../../utils/showNameInProfile'
 import { useSocketContext } from "../../context/SocketContext";
 
 
@@ -23,7 +23,7 @@ function MessagesHeader() {
               </div>
             </div>
 
-        <h2 className="text-xl font-semibold ml-6 text-primary_300">{selectedConversation.fullName}</h2>
+        <h2 className="text-xl font-semibold ml-6 text-primary_300 truncate w-56">{selectedConversation.fullName}</h2>
       </div>
 
       <div className="flex items-center text-2xl text-primary_300 space-x-4">
