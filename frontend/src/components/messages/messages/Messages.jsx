@@ -34,7 +34,7 @@ function Messages() {
       {// When there was no conversation
         !loading && messages.length < 1 &&
         <div className="flex justify-center text-[0.9rem] font-semibold">
-          <p className="text-shadow">Send a message to start the conversation</p>
+          <p className="text-shadow md:text-lg">Send a message to start the conversation</p>
         </div>
       }
       {// Loading

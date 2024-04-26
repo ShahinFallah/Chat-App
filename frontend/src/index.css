@@ -42,7 +42,7 @@
     animation: notifVisible 0.3s;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
     .home-bg-color {
         background: radial-gradient(at 70% 111%, #252653 0%, #171e2b 50%);
     }

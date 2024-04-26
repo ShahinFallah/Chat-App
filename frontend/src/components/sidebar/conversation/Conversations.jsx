@@ -53,7 +53,7 @@ const noConversation = () => {
   return (
 
     <div className="flex flex-col h-full items-center justify-start pt-2">
-      <span className="font-bold opacity-35 border-b p-2 rounded border-primary_200">Add new users through search</span>
+      <span className="font-bold opacity-35 border-b p-2 rounded border-primary_200 text-[0.9rem] xl:text-lg">Add new users through search</span>
     </div>
 
 
