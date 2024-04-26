@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt';
-import { Request, Response } from 'express';
+import { type Request, type Response } from 'express';
 import { client } from '../config/redis';
 
 import User from '../models/userModel';
-import { IUser } from '../types/types';
+import { type IUser } from '../types/types';
 
 
 export const getProfile = async (req : Request, res : Response) => {

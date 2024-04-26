@@ -1,10 +1,10 @@
-import { Request, Response } from 'express';
+import { type Request, type Response } from 'express';
 import { getReceiverSocketId, io } from '../socket/socket';
 
 import User from '../models/userModel';
 import Conversation from '../models/conversationM';
 import Message from '../models/messageModel';
-import { ConversationDocument, ConversationParticipant } from '../types/types';
+import { type ConversationDocument, type ConversationParticipant } from '../types/types';
 
 
 export const searchUser = async (req : Request, res : Response) => {

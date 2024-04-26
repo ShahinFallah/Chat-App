@@ -1,5 +1,5 @@
-import { Document, ObjectId } from 'mongoose';
-import { JwtPayload } from 'jsonwebtoken';
+import { Document, type ObjectId } from 'mongoose';
+import { type JwtPayload } from 'jsonwebtoken';
 
 declare global {
     namespace Express {

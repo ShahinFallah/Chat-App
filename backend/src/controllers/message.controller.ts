@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
+import { type Request, type Response } from 'express';
 import { getReceiverSocketId, io } from '../socket/socket';
 
 import Message from '../models/messageModel';
 import Conversation from '../models/conversationM';
-import { ConversationDocument, ConversationParticipant } from '../types/types';
+import { type ConversationDocument, type ConversationParticipant } from '../types/types';
 
 
 const sendMessage = async (req : Request, res : Response) => {

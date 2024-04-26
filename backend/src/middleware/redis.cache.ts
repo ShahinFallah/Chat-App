@@ -1,4 +1,4 @@
-import { Response, Request, NextFunction } from 'express';
+import { type Response, type Request, type NextFunction } from 'express';
 
 import { client } from '../config/redis';
 
