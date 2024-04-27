@@ -2,8 +2,8 @@
   "name": "chat-app",
   "module": "app.ts",
   "scripts": {
-    "dev": "bun --watch backend/src/app.ts",
-    "start": "bun backend/src/app.ts"
+    "dev": "bun --watch backend/app.ts",
+    "start": "bun backend/app.ts"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

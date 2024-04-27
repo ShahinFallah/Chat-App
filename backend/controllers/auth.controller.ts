@@ -28,7 +28,6 @@ export const signup = async (req : Request, res : Response) => {
         });
 
         if(user) {
-
             generateTokenAndSetCookie(user._id.toString(), res);
             await user.save();
 
@@ -58,7 +57,6 @@ export const login = async (req : Request, res : Response) => {
         const isPassword = await bcrypt.compare(password, user?.password || '');
 
         if(!user || !isPassword) return res.status(400).json({error : 'Invalid username or password'});
-
         if(user.isFreeze == true) user.isFreeze = false;
 
         generateTokenAndSetCookie(user._id.toString(), res);
@@ -80,7 +78,6 @@ export const logout = async (req : Request, res : Response) => {
 
     try {
         res.cookie('jwt', '', {maxAge : 1});
-
         res.status(200).json({message : 'logged out successfully'});
 
     } catch (error) {

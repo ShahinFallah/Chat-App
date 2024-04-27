@@ -12,7 +12,7 @@ export const searchUser = async (req : Request, res : Response) => {
     try {
         const { query } = req.params;
 
-        const users = await User.find({_id : {$ne : req.user._id}, username: { $regex: query, $options: 'i' } }).select('username fullName profilePic').limit(5);
+        const users = await User.find({_id : {$ne : req.user._id}, username: { $regex: query} }).select('username fullName profilePic').limit(5);
 
         res.status(200).json(users);
 

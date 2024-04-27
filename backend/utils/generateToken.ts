@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { Response } from 'express';
+import { type Response } from 'express';
 
 const generateTokenAndSetCookie = async (userId : string, res : Response) => {
 
