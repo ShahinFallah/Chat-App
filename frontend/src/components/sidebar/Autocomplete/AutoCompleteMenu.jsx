@@ -7,7 +7,7 @@ function AutoCompleteMenu({ loading }) {
   const { autoCompleteConversation } = useConversation()
 
   return (
-    <div className='w-48 absolute bg-accent_color bg-opacity-30 rounded-lg p-2 left-0 top-16 z-50 backdrop-blur-md max-h-[296px] overflow-y-auto'>
+    <div className='w-48 absolute bg-accent_color bg-opacity-30 rounded-lg p-2 left-0 top-16 z-50 backdrop-blur-md max-h-[296px] overflow-y-auto small-height:w-40'>
       <ul>
         {!loading && autoCompleteConversation &&
           autoCompleteConversation.map(conversation => (
@@ -16,13 +16,13 @@ function AutoCompleteMenu({ loading }) {
 
         {!loading && !autoCompleteConversation &&
           <div className='flex flex-col items-center justify-center'>
-            <span className='font-semibold'>No results found</span>
-            <PiWarningCircleLight className='text-2xl mt-1' />
+            <span className='font-semibold small-height:text-xs'>No results found</span>
+            <PiWarningCircleLight className='text-2xl mt-1 small-height:text-xl small-height:mt-2' />
           </div>}
 
           {loading &&
           <div className='flex justify-center'>
-          <span className='loading loading-dots my-2.5'></span>
+          <span className='loading loading-dots my-2.5 small-height:size-5'></span>
         </div>}
       </ul>
     </div>

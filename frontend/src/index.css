@@ -52,12 +52,6 @@
     }
 }
 
-@media screen and (max-height: 725px) {
-    .small-height {
-      min-width: 50px !important;
-    }
-  }
-
 @keyframes add-conversation-loading {
     from {
         opacity: 0;

@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       screens: {
-        'small-height': { 'raw': '(max-height: 725px)' },
+        'small-height': { 'raw': '(max-height: 800px) and (min-width:640px)' },
         'max-sm': { 'raw': '(max-width: 639px)' },
         'max-md': { 'raw': '(max-width: 767px)' },
         'max-lg': { 'raw': '(max-width: 1023px)' },

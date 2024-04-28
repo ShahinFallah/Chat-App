@@ -15,7 +15,7 @@ function MessageInput() {
 
   return (
     <form>
-      <div className="flex items-center bg-background p-3 rounded-lg border border-primary_200 bg-opacity-35">
+      <div className="flex items-center bg-background p-3 rounded-lg border border-primary_200 bg-opacity-35 small-height:p-2.5 small-height:text-xs small-height:max-h-[37px]">
         <div className="flex flex-grow-[1]">
           <input
             type="text"
@@ -25,7 +25,7 @@ function MessageInput() {
             onChange={e => setInputValue(e.target.value)}
           />
         </div>
-        <button disabled={loading} onClick={handleSubmit} type="submit" className="text-primary text-lg">
+        <button disabled={loading} onClick={handleSubmit} type="submit" className="text-primary text-lg small-height:text-sm">
           {
             !loading ?
               <VscSend /> :

@@ -23,18 +23,18 @@ function MessagesHeader() {
         <RiArrowLeftSLine onClick={handleCloseChat} className="text-4xl text-primary_300 cursor-pointer -ml-2.5 mr-2 lg:hidden" />
         <div className="flex items-center">
           <div className={`avatar placeholder ${isOnline ? "online" : ""}`}>
-            <div className="bg-gradient-to-br from-primary_200  text-text_color to-primary rounded-full w-[2.4rem] relative">
-              <span className="text-[1rem] absolute top-1.5 ">{showNameInProfile(selectedConversation.fullName)}</span>
+            <div className="bg-gradient-to-br from-primary_200 text-text_color to-primary rounded-full size-[2.4rem] relative small-height:size-[2.1rem]">
+              <span className="text-[1.1rem] absolute top-1.1 small-height:text-[1rem] small-height:top-1.1">{showNameInProfile(selectedConversation.fullName)}</span>
             </div>
           </div>
         </div>
 
-        <h2 className="text-lg font-semibold ml-2 text-primary_300 truncate w-32 sm:w-64">{selectedConversation.fullName}</h2>
+        <h2 className="text-lg font-semibold ml-2 text-primary_300 truncate w-32 sm:w-64 small-height:text-sm">{selectedConversation.fullName}</h2>
       </div>
 
       <div className="flex items-center text-2xl text-primary_300 space-x-4">
-        <IoCallOutline className="cursor-pointer transition duration-300 ease-in-out hover:text-green" />
-        <CiVideoOn className="cursor-pointer transition duration-300 ease-in-out hover:text-accent" />
+        <IoCallOutline className="cursor-pointer transition duration-300 ease-in-out hover:text-green small-height:text-lg" />
+        <CiVideoOn className="cursor-pointer transition duration-300 ease-in-out hover:text-accent small-height:text-lg" />
       </div>
 
     </div>

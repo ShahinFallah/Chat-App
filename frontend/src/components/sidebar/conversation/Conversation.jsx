@@ -51,14 +51,14 @@ function Conversation({ conversationData }) {
                         </div>
                         :
                         <div className={`avatar placeholder ${isOnline ? "online" : ""}`}>
-                            <div className="bg-gradient-to-br from-primary_200 text-text_color to-primary rounded-full size-[2.4rem] relative">
-                                <span className="text-[1.1rem] absolute top-1.1 ">{showNameInProfile(conversationData.fullName)}</span>
+                            <div className="bg-gradient-to-br from-primary_200 text-text_color to-primary rounded-full size-[2.4rem] relative small-height:size-[2.15rem]">
+                                <span className="text-[1.1rem] absolute top-[0.30rem] small-height:text-[1rem] small-height:top-[0.30rem]">{showNameInProfile(conversationData.fullName)}</span>
                             </div>
                         </div>
                 }
                 <div className="flex flex-col items-start w-28 ml-1.5 space-y-[0.5px]">
-                    <p className="font-semibold text-sm truncate w-48 sm:w-28 sm:mb-1 lg:w-48 lg:text-[0.955rem] small-height:lg:text-[0.8rem]">{conversationData.fullName}</p>
-                    <p className="w-28 font-semibold truncate text-[0.800rem] opacity-40 sm:text-[0.670rem]">Hey Whats your favorite Color ?</p>
+                    <p className="font-semibold text-sm truncate w-48 sm:w-28 sm:mb-1 lg:w-44 lg:text-[0.955rem] small-height:lg:text-[0.760rem] small-height:w-32">{conversationData.fullName}</p>
+                    <p className="w-28 font-semibold truncate text-[0.800rem] opacity-40 sm:text-[0.670rem] small-height:text-[0.600rem]">Hey Whats your favorite Color ?</p>
                 </div>
             </div>
             {
@@ -69,7 +69,8 @@ function Conversation({ conversationData }) {
                         sm:mr-1
                         lg:opacity-0 
                         lg:group-hover:opacity-100
-                        lg:hover:text-error" />
+                        lg:hover:text-error
+                        small-height:text-xs" />
 
 
                         {

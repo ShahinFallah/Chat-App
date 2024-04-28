@@ -21,10 +21,11 @@ function Sidebar() {
     sm:p-4
     sm:pb-14
     lg:min-w-72
-    small-height:!min-w-36
+    small-height:!min-w-64
+    small-height:!max-w-64
     xl:min-w-80
     `}>
-      <h1 className="font-bold mb-1.5 ml-1 text-xl">ChatApp</h1>
+      <h1 className="font-bold mb-1.5 ml-1 text-xl small-height:text-lg">ChatApp</h1>
       <SearchInput />
       <Conversations />
 

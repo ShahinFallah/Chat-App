@@ -10,9 +10,9 @@ function AutoComplete({ conversation }) {
 
     return (
         <li onMouseDown={handleClick} className='flex items-center justify-between font-semibold cursor-pointer p-2 transition-all hover:bg-accent_color hover:bg-opacity-25 rounded-md'>
-            <span className="truncate">{conversation.username}</span>
+            <span className="truncate small-height:text-sm">{conversation.username}</span>
             <div>
-                <IoMdSearch className="text-xl" />
+                <IoMdSearch className="text-xl small-height:text-[1rem]" />
             </div>
         </li>
     )
