@@ -23,7 +23,9 @@ const useUnreadMessages = create((set, get) => ({
     deleteUnreadMessages: id => set(prevState => {
         const updatedUnreadMessages = prevState.unreadMessages.filter(unread => unread._id !== id)
         return { unreadMessages: updatedUnreadMessages }
-    })
+    }),
+
+    clearUnreadMessages: () => set(() => ({ unreadMessages: [] }))
 }))
 
 export default useUnreadMessages

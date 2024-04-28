@@ -57,7 +57,7 @@ function Conversation({ conversationData }) {
                         </div>
                 }
                 <div className="flex flex-col items-start w-28 ml-1.5 space-y-[0.5px]">
-                    <p className="font-semibold text-sm truncate w-48 sm:w-28 sm:mb-1 lg:w-48 lg:text-[1rem]">{conversationData.fullName}</p>
+                    <p className="font-semibold text-sm truncate w-48 sm:w-28 sm:mb-1 lg:w-48 lg:text-[0.955rem] small-height:lg:text-[0.8rem]">{conversationData.fullName}</p>
                     <p className="w-28 font-semibold truncate text-[0.800rem] opacity-40 sm:text-[0.670rem]">Hey Whats your favorite Color ?</p>
                 </div>
             </div>

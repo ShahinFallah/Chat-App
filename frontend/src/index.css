@@ -42,11 +42,21 @@
     animation: notifVisible 0.3s;
 }
 
+.shadow-custom {
+    filter: drop-shadow(0 0 10px rgb(220, 184, 255));
+}
+
 @media (min-width: 1024px) {
     .home-bg-color {
         background: radial-gradient(at 70% 111%, #252653 0%, #171e2b 50%);
     }
 }
+
+@media screen and (max-height: 725px) {
+    .small-height {
+      min-width: 50px !important;
+    }
+  }
 
 @keyframes add-conversation-loading {
     from {

@@ -2,6 +2,8 @@ import { useState } from "react"
 import Gender from "./Gender"
 import useSignUp from "../../hooks/useSignUp"
 import { Link } from "react-router-dom"
+import { TbMessageChatbot } from "react-icons/tb";
+
 
 function SignUp() {
     const { loading, sendForm } = useSignUp()
@@ -33,7 +35,7 @@ function SignUp() {
 
 
     return (
-        <form onSubmit={handleSubmit} className="w-[410px] border border-primary_200 bg-gradient-to-br from-background_200 to-accent_color p-2 px-5 rounded-lg space-y-1 shadow-lg shadow-primary_200">
+        <form onSubmit={handleSubmit} className="w-full h-full border flex flex-col border-primary_200 bg-gradient-to-br from-background_200 to-accent_color p-2 px-5 rounded-lg space-y-1 shadow-lg shadow-primary_200 sm:w-[410px] sm:h-min">
             <h1 className="text-center text-2xl font-semibold mb-3">Sign Up</h1>
             <label className="form-control w-full">
                 <div className="label">
@@ -89,10 +91,10 @@ function SignUp() {
             </label>
             <Gender handleGender={handleGender} gender={form.gender} />
             <Link to='/login' className="text-sm hover:underline" href="#">Already have an account?</Link>
-            <button 
-            disabled={loading} 
-            type="submit" 
-            className="btn border w-full">
+            <button
+                disabled={loading}
+                type="submit"
+                className="btn border w-full">
                 {loading ? <span className="loading loading-spinner"></span> : "Sign Up"}
             </button>
         </form>

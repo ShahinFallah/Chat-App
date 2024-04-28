@@ -5,7 +5,15 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        'small-height': { 'raw': '(max-height: 725px)' },
+        'max-sm': { 'raw': '(max-width: 639px)' },
+        'max-md': { 'raw': '(max-width: 767px)' },
+        'max-lg': { 'raw': '(max-width: 1023px)' },
+        'max-xl': { 'raw': '(max-width: 1279px)' }
+      }
+    },
 
     colors: {
       background: "#0F1C2E",
