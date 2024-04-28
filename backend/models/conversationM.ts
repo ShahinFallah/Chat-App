@@ -1,14 +1,14 @@
-import mongoose from 'mongoose';
-import { type ConversationDocument } from '../types/types';
+import { Schema, model } from 'mongoose';
+import { type ConversationDocument } from '../types';
 
-const conversationSchema = new mongoose.Schema<ConversationDocument>({
+const conversationSchema = new Schema<ConversationDocument>({
 
     participants : [{
-        type : mongoose.Schema.Types.ObjectId,
+        type : Schema.Types.ObjectId,
         ref : 'User'
     }],
     message : [{
-        type : mongoose.Schema.Types.ObjectId,
+        type : Schema.Types.ObjectId,
         ref : 'Message',
         default : []
     }]
@@ -16,6 +16,6 @@ const conversationSchema = new mongoose.Schema<ConversationDocument>({
 }, {timestamps : true});
 
 
-const Conversation = mongoose.model<ConversationDocument>('Conversation', conversationSchema);
+const Conversation = model<ConversationDocument>('Conversation', conversationSchema);
 
 export default Conversation;

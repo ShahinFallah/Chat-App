@@ -1,7 +1,6 @@
 import bcrypt from 'bcrypt';
 import generateTokenAndSetCookie from '../utils/generateToken';
 import { type Request, type Response } from 'express';
-import { client } from '../config/redis';
 
 import User from '../models/userModel';
 
@@ -31,8 +30,6 @@ export const signup = async (req : Request, res : Response) => {
             generateTokenAndSetCookie(user._id.toString(), res);
             await user.save();
 
-            await client.setex(JSON.stringify(user._id), 240, JSON.stringify(user));
-
             res.status(201).json({_id : user._id, fullName : user.fullName, username : user.username});
 
         }else {
@@ -60,8 +57,6 @@ export const login = async (req : Request, res : Response) => {
         if(user.isFreeze == true) user.isFreeze = false;
 
         generateTokenAndSetCookie(user._id.toString(), res);
-
-        await client.setex(JSON.stringify(user._id), 240, JSON.stringify(user));
 
         res.status(200).json({_id : user._id, fullName : user.fullName, username : user.username});
 

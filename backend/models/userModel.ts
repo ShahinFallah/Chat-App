@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
-import { type IUser } from '../types/types'
+import { Schema, model } from 'mongoose';
+import { type IUser } from '../types'
 
-const userSchema = new mongoose.Schema<IUser>({
+const userSchema = new Schema<IUser>({
 
     fullName : {
         type : String,
@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema<IUser>({
         default : false
     },
     blockedUsers : [{
-        type : mongoose.Schema.Types.ObjectId,
+        type : Schema.Types.ObjectId,
         ref : 'User',
         default : []
     }]
@@ -43,6 +43,6 @@ const userSchema = new mongoose.Schema<IUser>({
 }, {timestamps : true});
 
 
-const User = mongoose.model<IUser>('User', userSchema);
+const User = model<IUser>('User', userSchema);
 
 export default User;

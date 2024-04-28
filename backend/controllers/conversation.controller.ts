@@ -4,7 +4,7 @@ import { getReceiverSocketId, io } from '../socket/socket';
 import User from '../models/userModel';
 import Conversation from '../models/conversationM';
 import Message from '../models/messageModel';
-import { type ConversationDocument, type ConversationParticipant } from '../types/types';
+import { type ConversationDocument, type ConversationParticipant, type IUser } from '../types';
 
 
 export const searchUser = async (req : Request, res : Response) => {
@@ -28,7 +28,7 @@ export const searchUser = async (req : Request, res : Response) => {
 export const AddConversation = async (req : Request, res : Response) => {
 
     try {
-        const user = await User.findById(req.params.id);
+        const user : IUser | null = await User.findById(req.params.id);
 
         if(!user) return res.status(400).json({error : 'User not found'});
 

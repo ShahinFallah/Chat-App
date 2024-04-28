@@ -1,15 +1,15 @@
-import mongoose from 'mongoose';
-import { type IMessage } from '../types/types'
+import { Schema, model } from 'mongoose';
+import { type IMessage } from '../types'
 
-const messageSchema = new mongoose.Schema<IMessage>({
+const messageSchema = new Schema<IMessage>({
 
     senderId : {
-        type : mongoose.Schema.Types.ObjectId,
+        type : Schema.Types.ObjectId,
         ref : 'User',
         required : true
     },
     receiverId : {
-        type : mongoose.Schema.Types.ObjectId,
+        type : Schema.Types.ObjectId,
         ref : 'User',
         required : true
     },
@@ -21,6 +21,6 @@ const messageSchema = new mongoose.Schema<IMessage>({
 }, {timestamps : true});
 
 
-const Message = mongoose.model<IMessage>('Message', messageSchema);
+const Message = model<IMessage>('Message', messageSchema);
 
 export default Message;

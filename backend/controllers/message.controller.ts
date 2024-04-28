@@ -3,7 +3,7 @@ import { getReceiverSocketId, io } from '../socket/socket';
 
 import Message from '../models/messageModel';
 import Conversation from '../models/conversationM';
-import { type ConversationDocument, type ConversationParticipant } from '../types/types';
+import { type ConversationDocument, type ConversationParticipant, type IMessage } from '../types';
 
 
 const sendMessage = async (req : Request, res : Response) => {
@@ -13,7 +13,7 @@ const sendMessage = async (req : Request, res : Response) => {
         const { id: receiverId } = req.params;
         const senderId : string = req.user._id;
 
-        let conversation = await Conversation.findOne<ConversationDocument>({
+        let conversation : ConversationDocument | null = await Conversation.findOne({
             participants: { $all: [senderId, receiverId] }
         });
 
@@ -24,7 +24,7 @@ const sendMessage = async (req : Request, res : Response) => {
 
             await conversation.save();
 
-            const conversations = await Conversation.findOne<ConversationDocument>({
+            const conversations : ConversationDocument | null = await Conversation.findOne({
 
                 participants: { $all: [senderId, receiverId] }
 
@@ -41,7 +41,7 @@ const sendMessage = async (req : Request, res : Response) => {
             }
         }
 
-        const newMessage = new Message({
+        const newMessage : IMessage = new Message({
             senderId,
             receiverId,
             message
@@ -74,7 +74,7 @@ const getMessages = async (req : Request, res : Response) => {
         const { id: userToChat } = req.params;
         const senderId : string = req.user._id;
 
-        const conversation = await Conversation.findOne({
+        const conversation : ConversationDocument | null = await Conversation.findOne({
             participants : {$all : [senderId, userToChat]}
         }).populate('message');
 

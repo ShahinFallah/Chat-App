@@ -1,9 +1,8 @@
 import bcrypt from 'bcrypt';
 import { type Request, type Response } from 'express';
-import { client } from '../config/redis';
 
 import User from '../models/userModel';
-import { type IUser } from '../types/types';
+import { type IUser } from '../types';
 
 
 export const getProfile = async (req : Request, res : Response) => {
@@ -58,9 +57,6 @@ export const updateUser = async (req : Request, res : Response) => {
         user.bio = bio || user.bio;
 
         await user.save();
-
-        await client.del(JSON.stringify(user._id), JSON.stringify(user));
-        await client.setex(JSON.stringify(user._id), 240, JSON.stringify(user));
 
         res.status(200).json({user});
 
