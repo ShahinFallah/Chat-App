@@ -1,8 +1,8 @@
 import { type Request, type Response } from 'express';
 import { getReceiverSocketId, io } from '../socket/socket';
 
-import Message from '../models/messageModel';
-import Conversation from '../models/conversationM';
+import Message from '../models/message.model';
+import Conversation from '../models/conversation.model';
 import { type ConversationDocument, type ConversationParticipant, type IMessage } from '../types';
 
 

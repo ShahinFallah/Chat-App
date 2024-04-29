@@ -1,5 +1,5 @@
 import jwt, { type JwtPayload } from 'jsonwebtoken';
-import User from '../models/userModel';
+import User from '../models/user.model';
 import { type Response, type Request, type NextFunction } from 'express';
 import { type IUser } from '../types';
 

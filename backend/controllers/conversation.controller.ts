@@ -1,9 +1,9 @@
 import { type Request, type Response } from 'express';
 import { getReceiverSocketId, io } from '../socket/socket';
 
-import User from '../models/userModel';
-import Conversation from '../models/conversationM';
-import Message from '../models/messageModel';
+import User from '../models/user.model';
+import Conversation from '../models/conversation.model';
+import Message from '../models/message.model';
 import type { IConversationDocument, IConversationParticipant, IUser } from '../types';
 
 
