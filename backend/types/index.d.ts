@@ -10,16 +10,14 @@ declare global {
 }
 
 export interface IUser extends Document {
-    fullName? : string
-    username? : string
-    password? : string
-    gender? : string
+    fullName : string
+    username : string
+    password : string
+    gender : string
     profilePic? : string
     bio? : string
     isFreeze? : boolean
     blockedUsers? : ObjectId[]
-    notInConversation? : ObjectId[]
-    conversations? : ObjectId[]
 };
 
 export interface IMessage extends Document {
@@ -28,20 +26,15 @@ export interface IMessage extends Document {
     message : string
 };
 
-export interface ConversationParticipant extends IUser {
-    fullName? : string
-    username? : string
-    password? : string
-    gender? : string
-    profilePic? : string
-    bio? : string
-    isFreeze? : boolean
-    blockedUsers? : ObjectId[]
-    notInConversation? : ObjectId[]
-    conversations? : ObjectId[]
+export interface IConversationParticipant extends IUser {
+    fullName : string
+    username : string
+    profilePic : string
 }
 
-export interface ConversationDocument extends Document {
+export interface IConversationDocument extends ConversationParticipant {
     participants: ConversationParticipant[];
-    message : ObjectId[]
+    message : {
+        message : string
+    }
 }

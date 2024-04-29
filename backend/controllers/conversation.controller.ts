@@ -4,7 +4,7 @@ import { getReceiverSocketId, io } from '../socket/socket';
 import User from '../models/userModel';
 import Conversation from '../models/conversationM';
 import Message from '../models/messageModel';
-import { type ConversationDocument, type ConversationParticipant, type IUser } from '../types';
+import type { IConversationDocument, IConversationParticipant, IUser } from '../types';
 
 
 export const searchUser = async (req : Request, res : Response) => {
@@ -49,17 +49,22 @@ export const getUserConversations = async (req : Request, res : Response) => {
 
         const conversations = await Conversation.find({
             participants : userId
-        }).populate('participants', 'username fullName profilePic');
+        }).populate('participants', 'username fullName profilePic').populate({
+            path: 'message',
+            options: { sort: { createdAt: -1 }, limit: 1 }
+        });
 
-        const mappedConversations = conversations.map((conversations : ConversationDocument) => {
+        const mappedConversations = conversations.map((conversations : IConversationDocument) => {
 
-            const participants = conversations.participants.find((participants : ConversationParticipant) => participants._id.toString() != userId);
+            const participants = conversations.participants.find((participants : IConversationParticipant) => participants._id.toString() != userId);
+            const message = conversations.message[0];
 
             return {
                 _id : participants._id,
                 fullName : participants.fullName,
                 username : participants.username,
-                profilePic : participants.profilePic
+                profilePic : participants.profilePic,
+                message : message.message
             }
         });
 
@@ -93,9 +98,9 @@ export const deleteConversation = async (req : Request, res : Response) => {
 
         }).populate('participants', 'profilePic username fullName').select('participants -_id');
         
-        const mappedConversations = conversations.map((conversation: ConversationDocument) => {
+        const mappedConversations = conversations.map((conversation: IConversationDocument) => {
 
-            const participant = conversation.participants.find((participant: ConversationParticipant) => participant._id.toString() != userToModify);
+            const participant = conversation.participants.find((participant: IConversationParticipant) => participant._id.toString() != userToModify);
 
             return {
                 _id: participant._id,
