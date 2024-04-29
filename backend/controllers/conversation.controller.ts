@@ -64,7 +64,7 @@ export const getUserConversations = async (req : Request, res : Response) => {
                 fullName : participants.fullName,
                 username : participants.username,
                 profilePic : participants.profilePic,
-                message : message.message
+                message : message ? message.message : null
             }
         });
 
