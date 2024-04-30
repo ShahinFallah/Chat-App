@@ -51,7 +51,8 @@ export const getUserConversations = async (req : Request, res : Response) => {
             participants : userId
         }).populate('participants', 'username fullName profilePic').populate({
             path: 'message',
-            options: { sort: { createdAt: -1 }, limit: 1 }
+            populate : 'message',
+            options: { sort: { createdAt: -1 }}
         });
 
         const mappedConversations = conversations.map((conversations : IConversationDocument) => {
@@ -64,7 +65,7 @@ export const getUserConversations = async (req : Request, res : Response) => {
                 fullName : participants.fullName,
                 username : participants.username,
                 profilePic : participants.profilePic,
-                message : message ? message.message : null
+                message : message ? message.message : message
             }
         });
 
