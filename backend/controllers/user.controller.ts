@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
-import { type Request, type Response } from 'express';
+import type { Request, Response } from 'express';
 
 import User from '../models/user.model';
-import { type IUser } from '../types';
+import type { IUser } from '../types';
 
 
 export const getProfile = async (req : Request, res : Response) => {

@@ -1,4 +1,4 @@
-import { Document, type ObjectId } from 'mongoose';
+import type { Document, ObjectId } from 'mongoose';
 import { type JwtPayload } from 'jsonwebtoken';
 
 declare global {
@@ -32,9 +32,11 @@ export interface IConversationParticipant extends IUser {
     profilePic : string
 }
 
-export interface IConversationDocument extends ConversationParticipant {
+export interface IConversationDocument extends IConversationParticipant {
     participants: ConversationParticipant[];
     message : {
         message : string
-    }
+        senderId? : ObjectId
+        receiverId? : ObjectId
+    }[]
 }

@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import generateTokenAndSetCookie from '../utils/generateToken';
-import { type Request, type Response } from 'express';
+import type { Request, Response } from 'express';
 
 import User from '../models/user.model';
 

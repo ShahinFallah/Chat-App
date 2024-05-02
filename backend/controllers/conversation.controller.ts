@@ -1,4 +1,4 @@
-import { type Request, type Response } from 'express';
+import type { Request, Response } from 'express';
 import { getReceiverSocketId, io } from '../socket/socket';
 
 import User from '../models/user.model';
@@ -65,7 +65,11 @@ export const getUserConversations = async (req : Request, res : Response) => {
                 fullName : participants.fullName,
                 username : participants.username,
                 profilePic : participants.profilePic,
-                message : message ? message.message : message
+                lastMessage : {
+                    message : message ? message.message : message,
+                    senderId : message ? message.senderId : message,
+                    receiverId : message ? message.receiverId : message
+                }
             }
         });
 

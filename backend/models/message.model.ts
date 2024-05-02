@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
-import { type IMessage } from '../types'
+import type { IMessage } from '../types'
 
-const messageSchema = new Schema<IMessage>({
+const messageSchema = new Schema({
 
     senderId : {
         type : Schema.Types.ObjectId,

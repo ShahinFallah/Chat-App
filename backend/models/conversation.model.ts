@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
-import { type ConversationDocument } from '../types';
+import { type IConversationDocument } from '../types';
 
-const conversationSchema = new Schema<ConversationDocument>({
+const conversationSchema = new Schema({
 
     participants : [{
         type : Schema.Types.ObjectId,
@@ -16,6 +16,6 @@ const conversationSchema = new Schema<ConversationDocument>({
 }, {timestamps : true});
 
 
-const Conversation = model<ConversationDocument>('Conversation', conversationSchema);
+const Conversation = model<IConversationDocument>('Conversation', conversationSchema);
 
 export default Conversation;
