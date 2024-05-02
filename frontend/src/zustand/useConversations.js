@@ -7,8 +7,18 @@ const useConversations = create(set => ({
     addConversations: conversation => set({ conversations: conversation }),
     addConLoading: false,
     setAddConLoading: (state) => set({ addConLoading: state }),
-    setLastMessage: (newMessage, type) => set(prevState => {
-        const updatedConversation = prevState.conversations.map(conversation => conversation._id === newMessage[type] ? { ...conversation, message: newMessage.message } : conversation)
+    setLastMessage: (newMessage, typeId) => set(prevState => {
+        const updatedConversation = prevState.conversations.map(
+            conversation => conversation._id === newMessage[typeId] ? {
+                ...conversation,
+                lastMessage: {
+                    ...conversation.lastMessage,
+                    senderId: newMessage.senderId,
+                    receiverId: newMessage.receiverId,
+                    message: newMessage.message,
+                }
+            } : conversation
+        )
         return { conversations: updatedConversation }
     })
 }))

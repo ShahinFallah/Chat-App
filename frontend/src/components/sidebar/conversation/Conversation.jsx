@@ -5,7 +5,7 @@ import { useSocketContext } from "../../../context/SocketContext";
 import useConversations from "../../../zustand/useConversations"
 import useUnreadMessages from "../../../zustand/unreadMessages";
 import showNameInProfile from "../../../utils/showNameInProfile";
-// import useListenLastMessage from "../../../hooks/useListenLastMessage";
+import { useAuthContext } from "../../../context/AuthContext";
 
 function Conversation({ conversationData }) {
     const { loading: deleteLoading, deleteConversation } = useDeleteConversation()
@@ -13,11 +13,14 @@ function Conversation({ conversationData }) {
     const { onlineUsers } = useSocketContext()
     const { conversations, addConversations } = useConversations()
     const { getUnreadMessages, deleteUnreadMessages } = useUnreadMessages()
+    const { userAuth } = useAuthContext()
 
     const isSelected = selectedConversation?._id === conversationData._id
     const isOnline = onlineUsers.includes(conversationData._id)
+    const lastMessageFromMe = conversationData?.lastMessage?.senderId === userAuth._id
 
     const unreadMessages = getUnreadMessages(conversationData._id)
+
 
     const handleDelete = async e => {
         e.stopPropagation()
@@ -57,8 +60,12 @@ function Conversation({ conversationData }) {
                         </div>
                 }
                 <div className="flex flex-col items-start w-28 ml-1.5 -space-y-[0.1rem]">
-                    <p className="font-semibold text-sm truncate w-48 sm:w-28 sm:mb-1 lg:w-44 lg:text-[0.955rem] small-height:lg:text-[0.760rem] small-height:w-32">{conversationData.fullName}</p>
-                    <p className="w-28 font-semibold truncate text-[0.800rem] opacity-40 sm:text-[0.670rem] small-height:text-[0.600rem]">{conversationData.message}</p>
+                    <p className="font-semibold text-sm truncate w-48 sm:w-28 sm:mb-1 lg:w-44 lg:text-[0.955rem] small-height:lg:text-[0.760rem] small-height:w-32">
+                        {conversationData.fullName}
+                    </p>
+                    <p className="w-28 font-semibold truncate text-[0.800rem] opacity-40 sm:text-[0.670rem] small-height:text-[0.600rem]">
+                        {lastMessageFromMe ? "You: " : ""}{conversationData?.lastMessage?.message ? conversationData?.lastMessage?.message : ""}
+                    </p>
                 </div>
             </div>
             {

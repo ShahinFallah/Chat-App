@@ -17,6 +17,10 @@ function MessagesHeader() {
     setSelectedConversation(null)
   }
 
+  const comingSoon = () => {
+    alert('Coming Soon!')
+  }
+
   return (
     <div className={`flex items-center justify-between w-full border-b border-b-primary_200 pb-2 px-2`}>
       <div className="flex items-center">
@@ -33,8 +37,8 @@ function MessagesHeader() {
       </div>
 
       <div className="flex items-center text-2xl text-primary_300 space-x-4">
-        <IoCallOutline className="cursor-pointer transition duration-300 ease-in-out hover:text-green small-height:text-lg" />
-        <CiVideoOn className="cursor-pointer transition duration-300 ease-in-out hover:text-accent small-height:text-lg" />
+        <IoCallOutline onClick={comingSoon} className="cursor-pointer transition duration-300 ease-in-out hover:text-green small-height:text-lg" />
+        <CiVideoOn onClick={comingSoon} className="cursor-pointer transition duration-300 ease-in-out hover:text-accent small-height:text-lg" />
       </div>
 
     </div>
