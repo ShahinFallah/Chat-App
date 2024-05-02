@@ -5,6 +5,7 @@ import { useSocketContext } from "../../../context/SocketContext";
 import useConversations from "../../../zustand/useConversations"
 import useUnreadMessages from "../../../zustand/unreadMessages";
 import showNameInProfile from "../../../utils/showNameInProfile";
+// import useListenLastMessage from "../../../hooks/useListenLastMessage";
 
 function Conversation({ conversationData }) {
     const { loading: deleteLoading, deleteConversation } = useDeleteConversation()
@@ -16,8 +17,7 @@ function Conversation({ conversationData }) {
     const isSelected = selectedConversation?._id === conversationData._id
     const isOnline = onlineUsers.includes(conversationData._id)
 
-
-    const unReadMessages = getUnreadMessages(conversationData._id)
+    const unreadMessages = getUnreadMessages(conversationData._id)
 
     const handleDelete = async e => {
         e.stopPropagation()
@@ -56,9 +56,9 @@ function Conversation({ conversationData }) {
                             </div>
                         </div>
                 }
-                <div className="flex flex-col items-start w-28 ml-1.5 space-y-[0.5px]">
+                <div className="flex flex-col items-start w-28 ml-1.5 -space-y-[0.1rem]">
                     <p className="font-semibold text-sm truncate w-48 sm:w-28 sm:mb-1 lg:w-44 lg:text-[0.955rem] small-height:lg:text-[0.760rem] small-height:w-32">{conversationData.fullName}</p>
-                    <p className="w-28 font-semibold truncate text-[0.800rem] opacity-40 sm:text-[0.670rem] small-height:text-[0.600rem]">Hey Whats your favorite Color ?</p>
+                    <p className="w-28 font-semibold truncate text-[0.800rem] opacity-40 sm:text-[0.670rem] small-height:text-[0.600rem]">{conversationData.message}</p>
                 </div>
             </div>
             {
@@ -74,9 +74,9 @@ function Conversation({ conversationData }) {
 
 
                         {
-                            !unReadMessages == 0 ?
-                                <div className="absolute flex justify-center items-center right-0 size-6 bg-primary rounded-full group-hover:opacity-0 group-hover:-z-50 transition-opacity duration-300 sm:right-1">
-                                    <span className="text-sm font-semibold text-text_color">{unReadMessages}</span>
+                            !unreadMessages == 0 ?
+                                <div className="absolute flex justify-center items-center right-0 size-6 bg-primary rounded-full group-hover:opacity-0 group-hover:-z-50 transition-opacity duration-300 sm:right-1 small-height:size-5">
+                                    <span className="text-sm font-semibold text-text_color small-height:text-xs">{unreadMessages}</span>
                                 </div> :
                                 null
                         }

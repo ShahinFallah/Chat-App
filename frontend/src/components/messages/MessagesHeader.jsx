@@ -24,7 +24,7 @@ function MessagesHeader() {
         <div className="flex items-center">
           <div className={`avatar placeholder ${isOnline ? "online" : ""}`}>
             <div className="bg-gradient-to-br from-primary_200 text-text_color to-primary rounded-full size-[2.4rem] relative small-height:size-[2.1rem]">
-              <span className="text-[1.1rem] absolute top-1.1 small-height:text-[1rem] small-height:top-1.1">{showNameInProfile(selectedConversation.fullName)}</span>
+              <span className="text-[1.1rem] absolute top-[0.35rem] small-height:text-[0.95rem]">{showNameInProfile(selectedConversation.fullName)}</span>
             </div>
           </div>
         </div>

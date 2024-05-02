@@ -29,15 +29,15 @@ function Notification({ data }) {
 
     return (
         <div
-            className={`fixed top-4 left-4 w-64 bg-gradient-to-tr from-background_200 to-background_300 shadow-lg rounded-md border-l-4 border-primary p-3 overflow-hidden transform transition-transform z-50 cursor-pointer ${show ? 'visibleNotif' : '-translate-x-[280px]'}`}
+            className={`fixed top-4 left-4 w-64 bg-gradient-to-tr from-background_200 to-background_300 shadow-lg rounded-md border-l-4 border-primary p-3 small-height:p-1 small-height:py-2 overflow-hidden transform transition-transform z-50 cursor-pointer small-height:w-56 ${show ? 'visibleNotif' : '-translate-x-[280px]'}`}
             onClick={() => setSelectedConversation(data.notification)}
         >
             <div className="flex items-start">
                 {
                     true ?
                         <div className={`avatar placeholder`}>
-                            <div className="bg-gradient-to-br from-primary_200  text-text_color to-primary rounded-full w-[2.7rem] relative">
-                                <span className="text-[1.2rem] absolute top-1.5 ">{showNameInProfile(data.notification.fullName )}</span>
+                            <div className="bg-gradient-to-br from-primary_200  text-text_color to-primary rounded-full w-[2.7rem] relative small-height:w-[2.35rem]">
+                                <span className="text-[1.1rem] absolute top-[0.500rem] small-height:top-[0.40rem] small-height:text-[1.050rem]">{showNameInProfile(data.notification.fullName )}D</span>
                             </div>
                         </div>
                         :
@@ -51,16 +51,16 @@ function Notification({ data }) {
                 }
 
                 <div className="ml-3">
-                    <p className="text-lg font-semibold text-gray-800 w-28 truncate">{data.notification.fullName}</p>
-                    <p className="text-sm text-gray-600 truncate w-24">{data.message}</p>
+                    <p className="text-lg text-primary_300 font-semibold w-28 truncate small-height:text-[1rem] small-height:-mt-1">{data.notification.fullName}</p>
+                    <p className="text-sm -mt-0.5 truncate w-24 small-height:text-sm small-height:-mt-[0.5]">{data.message}</p>
                 </div>
                 <div className="ml-auto pl-3 absolute top-2 right-2">
                     <button
                         type="button"
-                        className="text-gray-400 hover:text-gray-500 focus:outline-none focus:text-gray-500 transition"
+                        className="focus:outline-none transition"
                         onClick={handleHidden}
                     >
-                        <IoClose size='23' />
+                        <IoClose className=' size-6 small-height:size-5'/>
                     </button>
                 </div>
             </div>

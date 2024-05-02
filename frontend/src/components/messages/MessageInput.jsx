@@ -18,6 +18,7 @@ function MessageInput() {
       <div className="flex items-center bg-background p-3 rounded-lg border border-primary_200 bg-opacity-35 small-height:p-2.5 small-height:text-xs small-height:max-h-[37px]">
         <div className="flex flex-grow-[1]">
           <input
+            autoFocus
             type="text"
             className="bg-transparent w-full break-words outline-none"
             placeholder="Send a message"

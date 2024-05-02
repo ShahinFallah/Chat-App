@@ -2,9 +2,11 @@ import { useState } from 'react';
 import chatConversationHandler from '../zustand/useChatConversationHandler'
 import toast from 'react-hot-toast';
 import popSound from '../assets/sounds/pop.mp3'
+import useConversations from '../zustand/useConversations';
 
 function useSendMessage() {
     const { selectedConversation, messages, setMessage } = chatConversationHandler()
+    const { setLastMessage } = useConversations()
 
     const [loading, setLoading] = useState(false)
 
@@ -28,6 +30,7 @@ function useSendMessage() {
             const pop = new Audio(popSound)
             
             setMessage([...messages, data])
+            setLastMessage(data, 'receiverId')
             pop.volume = 0.5
             pop.play()
 

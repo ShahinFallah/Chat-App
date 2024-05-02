@@ -9,7 +9,7 @@ function useLogout() {
     const [loading, setLoading] = useState(false)
     const { setUserAuth } = useAuthContext()
     const { addConversations } = useConversations()
-    const { setMessage } = useChatConversationHandler()
+    const { setMessage, setSelectedConversation } = useChatConversationHandler()
     const { clearUnreadMessages } = useUnreadMessages()
 
     const logout = async () => {
@@ -30,6 +30,7 @@ function useLogout() {
             addConversations([])
             setMessage([])
             clearUnreadMessages()
+            setSelectedConversation(null)
         } catch (error) {
             toast.error(error.message)
         } finally {

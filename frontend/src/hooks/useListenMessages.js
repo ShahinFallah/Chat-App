@@ -9,7 +9,7 @@ import useUnreadMessages from "../zustand/unreadMessages"
 function useListenMessages() {
     const { socket } = useSocketContext();
     const { messages, setMessage, selectedConversation } = useChatConversationHandler();
-    const { conversations, addConversations } = useConversations();
+    const { conversations, addConversations, setLastMessage } = useConversations();
     const { notification, setNotification } = useNotificationContext()
     const { addUnreadMessage } = useUnreadMessages()
     const notifSound = new Audio(notificationSound)
@@ -28,6 +28,8 @@ function useListenMessages() {
                 addUnreadMessage(foundNotification)
                 unreadMessageSorter(foundNotification._id)
             }
+
+            setLastMessage(newMessage, 'senderId')
         });
 
         return () => socket?.off('newMessage');
@@ -42,12 +44,12 @@ function useListenMessages() {
     const unreadMessageSorter = (id) => {
         const newConversations = [...conversations]
         const foundedIndex = newConversations.findIndex(con => con._id === id)
-        
+
         if (foundedIndex === -1) return;
-    
+
         const firstUnread = newConversations.splice(foundedIndex, 1)[0]
         newConversations.unshift(firstUnread)
-    
+
         addConversations(newConversations)
     }
 

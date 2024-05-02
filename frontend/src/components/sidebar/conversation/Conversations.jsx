@@ -22,20 +22,21 @@ function Conversations() {
         </div>
       )}
 
-      {!conversations.length <= 0 ?
-
+      {
         !getLoading ?
-          <div className="flex flex-col mt-6 text-primary_300 overflow-y-auto space-y-4">
-            {conversations.map(conversation => (
-              <Conversation key={conversation._id} conversationData={conversation} />
-            ))}
-          </div> :
-          <div className="flex justify-center mt-5">
+        
+        !conversations.length <= 0 ?
+            <div className="flex flex-col mt-6 text-primary_300 overflow-y-auto space-y-4">
+              {conversations.map(conversation => (
+                <Conversation key={conversation._id} conversationData={conversation} />
+              ))}
+            </div> : noConversation()
+
+          : <div className="flex justify-center mt-5">
             <span className="loading loading-spinner"></span>
           </div>
 
-
-        : noConversation()}
+      }
     </>
   )
 }
