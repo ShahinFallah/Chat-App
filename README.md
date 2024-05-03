@@ -4,7 +4,7 @@
 
 ChatApp is a full-stack web application developed using the MERN (MongoDB, Express.js, React.js, Node.js) stack. It provides real-time messaging functionality implemented with Socket.IO.
 
-#### Features:
+### Features:
 - **Real-time messaging**: ChatApp allows users to send and receive messages in real-time, creating seamless communication experiences.
 - **Online users display**: See which users are currently online.
 - **User search**: Search for users to start chatting with in real-time.
@@ -13,7 +13,7 @@ ChatApp is a full-stack web application developed using the MERN (MongoDB, Expre
 - **Notification support**: Receive notifications for new messages.
 - **Unread message indicator**: Display unread message indicators for conversations.
 
-#### Technologies Used:
+### Technologies Used:
 - **MongoDB**: A NoSQL database used for storing chat messages and user data.
 - **Express.js**: A web application framework for Node.js used to build the backend server and APIs.
 - **React.js**: A JavaScript library for building user interfaces, utilized for creating the frontend of ChatApp.
@@ -25,15 +25,15 @@ ChatApp is a full-stack web application developed using the MERN (MongoDB, Expre
 - **Tailwind CSS**: A utility-first CSS framework used for styling the frontend of ChatApp, providing customizable and responsive design options.
 
 
-#### Dependencies:
+### Dependencies:
 - **react-hot-toast**: Toast notifications for React apps.
 - **react-icons**: Icons for React applications.
 - **react-router-dom**: Routing library for React applications.
 - **socket.io-client**: Client-side library for Socket.IO.
 - **zustand**: State management for React.
 
-#### Getting Started:
-##### To run ChatApp locally, follow these steps:
+### Getting Started:
+#### To run ChatApp locally, follow these steps:
 
 1. Clone the repository to your local machine.
 2. Navigate to the project directory.
@@ -43,8 +43,8 @@ ChatApp is a full-stack web application developed using the MERN (MongoDB, Expre
 6. start the backend using `bun run dev`
 
 #### Credits:
-- **Backend Development**: Ashkan
-- **Frontend Development**: [Your Name]
+- **Backend Development**: [AshkanHaghdost](https://github.com/AshkanHagh)
+- **Frontend Development**: [ShahinFallah](https://github.com/ShahinFallah)
 
 #### License:
 This project is licensed under the [MIT License](link-to-license).
