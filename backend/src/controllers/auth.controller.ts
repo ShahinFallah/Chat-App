@@ -20,6 +20,7 @@ export const login = CatchAsyncError(async (req : Request, res : Response, next 
 
     try {
         const user : Omit<TInferSelectUser, 'password'> = await loginRegister(req.body);
+        req.user = user;
         const accessToken = sendToken(user, res);
         res.status(200).json({success : true, user, accessToken});
         

@@ -6,6 +6,12 @@ class ValidationError extends ErrorHandler {
     }
 }
 
+class RouteNowFoundError extends ErrorHandler {
+    constructor(message : string) {
+        super(message, 404);
+    }
+}
+
 class BadRequestError extends ErrorHandler {
     constructor(message : string = 'Bad request') {
         super(message, 400);
@@ -80,5 +86,5 @@ class PasswordDoesNotMatch extends ErrorHandler {
 
 export {BadRequestError, UnauthorizedError, ForbiddenError, ResourceNotFoundError, UsernameExistsError, PasswordDoesNotMatch,
     InvalidUserIdError, InvalidUsernameOrPasswordError, LoginRequiredError, InternalServerError, AccessTokenInvalidError, ValidationError,
-    TokenRefreshError
+    TokenRefreshError, RouteNowFoundError
 };
