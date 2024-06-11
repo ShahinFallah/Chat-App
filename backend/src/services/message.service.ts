@@ -1,6 +1,7 @@
 import type { TInferSelectMessage, TInferSelectParticipant } from '../@types';
 import { insertIntoCache } from '../db/cache';
-import { findParticipantsInCache, insertInToCacheList, insertInToCacheListHash } from '../db/cache/message.cache';
+import { findParticipantsInCache } from '../db/cache/message.cache';
+import { insertInToCacheSetList, insertInToCacheListHash } from '../db/cache'
 import { findFirstParticipantByConversationId, findManyMessageByConversationId, findManyParticipantByUsersId, insertNewConversation, insertNewMessage } 
 from '../db/query/message.query';
 import { BadRequestError } from '../utils/customErrors';
@@ -20,16 +21,16 @@ const findCommonConversation = (firstPerson : TInferSelectParticipant[], secondP
 const insertParticipantsArrayInCache = async (firstPerson : TInferSelectParticipant[], secondPerson : TInferSelectParticipant[], 
     senderId : string, receiverId : string
 ) : Promise<void> => {
-    await Promise.all([firstPerson.map(async user => {await insertInToCacheList(`user:${senderId}:participants`, user)}),
-        secondPerson.map(async user => {await insertInToCacheList(`user:${receiverId}:participants`, user)})
+    await Promise.all([firstPerson.map(async user => {await insertInToCacheSetList(`user:${senderId}:participants`, user)}),
+        secondPerson.map(async user => {await insertInToCacheSetList(`user:${receiverId}:participants`, user)})
     ])
 }
 
 const insertNewParticipantsInCache = async <T extends unknown, B extends unknown>(firstPerson : T, secondPerson : B, 
     senderId : string, receiverId : string
 ) : Promise<void> => {
-    await Promise.all([insertInToCacheList(`user:${senderId}:participants`, firstPerson), 
-        insertInToCacheList(`user:${receiverId}:participants`, secondPerson)
+    await Promise.all([insertInToCacheSetList(`user:${senderId}:participants`, firstPerson), 
+        insertInToCacheSetList(`user:${receiverId}:participants`, secondPerson)
     ]);
 }
 

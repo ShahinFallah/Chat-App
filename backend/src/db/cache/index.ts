@@ -16,3 +16,11 @@ export const findInCache = async <T>(key : string) : Promise<T> => {
 export const deleteFromCache = async (key : string) : Promise<void> => {
     await redis.del(key);
 }
+
+export const insertInToCacheSetList = async <T extends unknown>(key : string, value : T) => {
+    await redis.sadd(key, JSON.stringify(value)) as T;
+};
+
+export const insertInToCacheListHash = async <T extends unknown>(key : string, indexId : string, value : T) => {
+    await redis.hset(key, indexId, JSON.stringify(value)) as T;
+}
