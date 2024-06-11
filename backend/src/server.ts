@@ -1,4 +1,4 @@
-import { app } from './app';
+import { server } from './webSocket/socket.io';
 const PORT = process.env.PORT || 9810;
 
-app.listen(PORT, () => console.log(`Started server http://localhost:${PORT}`));
+server.listen(PORT, () => console.log(`Started server http://localhost:${PORT}`));

@@ -1,5 +1,5 @@
 {
-  "id": "91c109af-948a-4767-904f-9e3c52ac00c3",
+  "id": "2159ee41-e93e-44ea-8bb8-09f299cbb9c9",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -97,7 +97,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "messages_senderId_users_id_fk": {
@@ -110,7 +110,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "messages_receiverId_users_id_fk": {
@@ -123,7 +123,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -166,7 +166,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "participants_userId_users_id_fk": {
@@ -179,20 +179,12 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "participants_conversation_id_unique": {
-          "name": "participants_conversation_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "conversation_id"
-          ]
-        }
-      }
+      "uniqueConstraints": {}
     },
     "public.users": {
       "name": "users",
@@ -216,27 +208,6 @@
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
-        },
-        "gender": {
-          "name": "gender",
-          "type": "gender",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "profilePic": {
-          "name": "profilePic",
-          "type": "varchar(350)",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "''"
-        },
-        "bio": {
-          "name": "bio",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "''"
         },
         "password": {
           "name": "password",
@@ -281,16 +252,7 @@
       "uniqueConstraints": {}
     }
   },
-  "enums": {
-    "public.gender": {
-      "name": "gender",
-      "schema": "public",
-      "values": [
-        "male",
-        "female"
-      ]
-    }
-  },
+  "enums": {},
   "schemas": {},
   "_meta": {
     "columns": {},

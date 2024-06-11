@@ -20,15 +20,15 @@ export const ConversationTable = pgTable('conversations', {
 
 export const ParticipantTable = pgTable('participants', {
     id : uuid('id').primaryKey().defaultRandom(),
-    conversationId : uuid('conversation_id').references(() => ConversationTable.id).unique(),
-    userId : uuid('userId').references(() => UserTable.id),
+    conversationId : uuid('conversation_id').references(() => ConversationTable.id, {onDelete : 'cascade'}),
+    userId : uuid('userId').references(() => UserTable.id, {onDelete : 'cascade'}),
 });
 
 export const MessageTable = pgTable('messages', {
     id : uuid('id').primaryKey().defaultRandom(),
-    conversationId : uuid('conversation_id').references(() => ConversationTable.id),
-    senderId : uuid('senderId').references(() => UserTable.id),
-    receiverId : uuid('receiverId').references(() => UserTable.id),
+    conversationId : uuid('conversation_id').references(() => ConversationTable.id, {onDelete : 'cascade'}),
+    senderId : uuid('senderId').references(() => UserTable.id, {onDelete : 'cascade'}),
+    receiverId : uuid('receiverId').references(() => UserTable.id, {onDelete : 'cascade'}),
     message : varchar('message', {length : 500}).notNull(),
     createdAt : timestamp('createdAt').defaultNow(),
     updatedAt : timestamp('updatedAt').defaultNow().$onUpdate(() => new Date())

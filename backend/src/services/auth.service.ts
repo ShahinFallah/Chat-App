@@ -52,10 +52,10 @@ export const logoutService = async (userId : string) => {
 export const refreshAccessTokenService = async (accessToken : string) : Promise<Omit<TInferSelectUser, 'password'>> => {
     try {
         const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN as Secret) as JwtPayload & TInferSelectUser;
-        if(!decoded) throw new LoginRequiredError();
+        if(!decoded) throw new TokenRefreshError();
 
         const session : Omit<TInferSelectUser, 'password'> = await findInCache(`user:${decoded.id}`);
-        if(!session) throw new TokenRefreshError();
+        if(!session) throw new LoginRequiredError();
 
         return session;
 

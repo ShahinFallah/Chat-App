@@ -25,3 +25,7 @@ export const loginSchema : ObjectSchema = Joi.object({
     username : Joi.string().required().trim(),
     password : Joi.string().min(6).required().trim(),
 });
+
+export const newMessageSchema : ObjectSchema = Joi.object({
+    message : Joi.string().max(500).trim().required()
+});
