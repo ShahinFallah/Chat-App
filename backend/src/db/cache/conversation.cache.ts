@@ -1,6 +1,5 @@
 import { findInCache } from '.';
-import type { TInferSelectUser } from '../../@types';
-import { ResourceNotFoundError } from '../../utils/customErrors';
+import type { TInferSelectMessage, TInferSelectUser } from '../../@types';
 import { regexp } from '../../utils/regexQuery';
 import redis from '../redis';
 

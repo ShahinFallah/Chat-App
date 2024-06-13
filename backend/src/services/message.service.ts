@@ -1,7 +1,7 @@
 import type { TInferSelectMessage, TInferSelectParticipant } from '../@types';
 import { insertIntoCache } from '../db/cache';
 import { findParticipantsInCache } from '../db/cache/message.cache';
-import { insertInToCacheSetList, insertInToCacheListHash } from '../db/cache'
+import { insertInToCacheSetList, insertInToCacheList } from '../db/cache'
 import { findFirstParticipantByConversationId, findManyMessageByConversationId, findManyParticipantByUsersId, insertNewConversation, insertNewMessage } 
 from '../db/query/message.query';
 import { BadRequestError } from '../utils/customErrors';
@@ -21,16 +21,16 @@ const findCommonConversation = (firstPerson : TInferSelectParticipant[], secondP
 const insertParticipantsArrayInCache = async (firstPerson : TInferSelectParticipant[], secondPerson : TInferSelectParticipant[], 
     senderId : string, receiverId : string
 ) : Promise<void> => {
-    await Promise.all([firstPerson.map(async user => {await insertInToCacheSetList(`user:${senderId}:participants`, user)}),
-        secondPerson.map(async user => {await insertInToCacheSetList(`user:${receiverId}:participants`, user)})
+    await Promise.all([firstPerson.map(async user => {await insertInToCacheSetList(`participants:user:${senderId}`, user)}),
+        secondPerson.map(async user => {await insertInToCacheSetList(`participants:user:${receiverId}`, user)})
     ])
 }
 
 const insertNewParticipantsInCache = async <T extends unknown, B extends unknown>(firstPerson : T, secondPerson : B, 
     senderId : string, receiverId : string
 ) : Promise<void> => {
-    await Promise.all([insertInToCacheSetList(`user:${senderId}:participants`, firstPerson), 
-        insertInToCacheSetList(`user:${receiverId}:participants`, secondPerson)
+    await Promise.all([insertInToCacheSetList(`participants:user:${senderId}`, firstPerson), 
+        insertInToCacheSetList(`participants:user:${receiverId}`, secondPerson)
     ]);
 }
 
@@ -38,8 +38,8 @@ export const sendMessageService = async (message : string, senderId : string, re
     try {
         let conversationId;
         const receiverSocketId : string | undefined = getReceiverSocketId(receiverId);
-        const {firstPersonCache, secondPersonCache} = await findParticipantsInCache(`user:${senderId}:participants`,
-        `user:${receiverId}:participants`);
+        const {firstPersonCache, secondPersonCache} = await findParticipantsInCache(`participants:user:${senderId}`,
+        `participants:user:${receiverId}`);
 
         if(firstPersonCache.length <= 0 || secondPersonCache.length <= 0) {
             const {firstPerson, secondPerson} = await findManyParticipantByUsersId(senderId, receiverId);
@@ -53,8 +53,8 @@ export const sendMessageService = async (message : string, senderId : string, re
             const {firstPersonParticipant, secondPersonParticipant, conversation} = await insertNewConversation(senderId, receiverId);
             conversationId = conversation.id;
 
-            insertIntoCache(`conversation:${conversationId}`, conversation, 1209600),
-            insertNewParticipantsInCache(firstPersonParticipant, secondPersonParticipant, senderId, receiverId)
+            insertIntoCache(`conversation:${conversationId}`, conversation, 1209600);
+            insertNewParticipantsInCache(firstPersonParticipant, secondPersonParticipant, senderId, receiverId);
 
             const {firstPersonInfo, secondPersonInfo} = await findFirstParticipantByConversationId(conversationId);
             // insertNewParticipantsInCache(firstPersonInfo, secondPersonInfo, senderId, receiverId);
@@ -64,8 +64,7 @@ export const sendMessageService = async (message : string, senderId : string, re
         }
         const newMessage : TInferSelectMessage = await insertNewMessage(senderId, receiverId, conversationId!, message);
         if(!newMessage) throw new BadRequestError();
-
-        await insertInToCacheListHash(`message:${conversationId}`, newMessage.id, newMessage);
+        await insertInToCacheList(`message:${conversationId}`, newMessage);
 
         if(receiverSocketId) {
             io.to(receiverSocketId).emit('newMessage', newMessage);
@@ -73,7 +72,7 @@ export const sendMessageService = async (message : string, senderId : string, re
         return newMessage;
         
     } catch (error : any) {
-        throw new ErrorHandler(`An error occurred : ${error.message}`, error.statusCode);
+        throw new ErrorHandler(`An error occurred : ${error.message}`, 400);
     }
 }
 

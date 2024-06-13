@@ -21,6 +21,11 @@ export const insertInToCacheSetList = async <T extends unknown>(key : string, va
     await redis.sadd(key, JSON.stringify(value)) as T;
 };
 
-export const insertInToCacheListHash = async <T extends unknown>(key : string, indexId : string, value : T) => {
-    await redis.hset(key, indexId, JSON.stringify(value)) as T;
+export const insertInToCacheList = async <T extends unknown>(key : string, value : T) => {
+    await redis.rpush(key, JSON.stringify(value));
+}
+
+export const findInCacheList = async <T extends unknown>(key : string) => {
+    const data = await redis.lrange(key, 0, -1);
+    return data.map(data => JSON.parse(data)) as T;
 }

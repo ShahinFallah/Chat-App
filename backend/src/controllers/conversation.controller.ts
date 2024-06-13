@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
 import { CatchAsyncError } from '../middlewares/catchAsyncError';
-import { newConversationService, searchUserService } from '../services/conversation.service';
+import { deleteConversationService, getConversationsService, newConversationService, searchUserService } from '../services/conversation.service';
 import type { TInferSelectUser } from '../@types';
 
 export const searchUser = CatchAsyncError(async (req : Request, res : Response, next : NextFunction) => {
@@ -24,6 +24,32 @@ export const newConversation = CatchAsyncError(async (req : Request, res : Respo
         const user : Omit<TInferSelectUser, 'password'> = await newConversationService(userId);
 
         res.status(200).json({success : true, user});
+        
+    } catch (error) {
+        return next(error);
+    }
+});
+
+export const getConversations = CatchAsyncError(async (req : Request, res : Response, next : NextFunction) => {
+
+    try {
+        const currentUserId = req.user!.id;
+        const conversation = await getConversationsService(currentUserId);
+        res.status(200).json({success : true, conversation});
+        
+    } catch (error) {
+        return next(error);
+    }
+});
+
+export const deleteConversation = CatchAsyncError(async (req : Request, res : Response, next : NextFunction) => {
+
+    try {
+        const { conversationId, userToModify } = req.params as {conversationId : string, userToModify : string};
+        const currentUserId = req.user!.id;
+        
+        const conversations = await deleteConversationService(conversationId, currentUserId, userToModify);
+        res.status(200).json({success : true, conversations});
         
     } catch (error) {
         return next(error);

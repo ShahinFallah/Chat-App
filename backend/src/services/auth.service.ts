@@ -29,7 +29,7 @@ export const loginRegister = async (body : TInferSelectUser) => {
     try {
         const { username, password : pass } = body as TInferSelectUser;
         const user : TInferSelectUser = await findFirstUser(undefined, username);
-        const isPasswordMatch : boolean = await comparePassword(pass, user.password);
+        const isPasswordMatch : boolean = await comparePassword(pass, user?.password || '');
 
         if(!user || !isPasswordMatch) throw new InvalidUsernameOrPasswordError();
         const {password, ...others} = user;
