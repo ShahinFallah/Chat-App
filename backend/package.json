@@ -2,12 +2,15 @@
   "name": "chat-app-backend",
   "module": "server.ts",
   "type": "module",
+  "version": "3.0.1",
   "scripts": {
+    "start" : "bun src/server.ts",
     "dev": "bun --watch src/server.ts",
     "db:generate": "bunx drizzle-kit generate",
     "db:migrate": "bun src/db/migrate.ts",
     "db:studio": "bunx drizzle-kit studio",
-    "db:seed": "bun src/db/seed/seed.ts"
+    "db:seed": "bun src/db/seed/seed.ts",
+    "db:up": "docker-compose --env-file .env up -d"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
