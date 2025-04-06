@@ -1,17 +1,17 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  db:
-    image: postgres:16
-    container_name: postgres_db
+  postgres:
+    image: registry.docker.ir/postgres:16.4-alpine
+    restart: always
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-    ports:
-      - "5432:5432"
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
 
 volumes:
-  pgdata:
+  postgres_data:

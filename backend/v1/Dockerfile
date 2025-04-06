@@ -9,9 +9,10 @@ RUN bun install --frozen-lockfile --production
 FROM base AS release
 COPY --from=install /usr/src/app/node_modules node_modules
 COPY . .
+COPY ./.env ./.env
 
 ENV NODE_ENV=production
 
 USER bun
 EXPOSE 7319
-ENTRYPOINT [ "bun", "run", "src/server.ts" ]
+ENTRYPOINT [ "bun", "run", "app.ts" ]
