@@ -1,17 +1,15 @@
 import { useState } from "react"
 import toast from "react-hot-toast"
 import useConversations from "../zustand/useConversations"
-import chatConversationHandler from '../zustand/useChatConversationHandler'
 
 function useDeleteConversation() {
     const [loading, setLoading] = useState(false)
     const { conversations, addConversations } = useConversations()
-    const { setSelectedConversation, selectedConversation } = chatConversationHandler()
 
     const deleteConversation = async id => {
         setLoading(true)
         try {
-            const res = await fetch(`/api/conversation/delete/${id}`, {
+            const res = await fetch(`${import.meta.env.VITE_BASE_URL}/conversation/delete/${id}`, {
                 method: 'delete'
             })
             const data = await res.json()

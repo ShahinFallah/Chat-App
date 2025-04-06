@@ -13,7 +13,7 @@ function useGetConversation() {
 
         setLoading(true)
         try {
-            const res = await fetch(`api/conversation/search/${value}`)
+            const res = await fetch(`${import.meta.env.VITE_BASE_URL}/conversation/search/${value}`)
             const data = await res.json()
 
             if (data.error) throw new Error(data.error)

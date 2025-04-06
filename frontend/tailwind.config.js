@@ -1,18 +1,16 @@
 /** @type {import('tailwindcss').Config} */
+import daisyui from "daisyui";
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       screens: {
-        'small-height': { 'raw': '(max-height: 800px) and (min-width:640px)' },
-        'max-sm': { 'raw': '(max-width: 639px)' },
-        'max-md': { 'raw': '(max-width: 767px)' },
-        'max-lg': { 'raw': '(max-width: 1023px)' },
-        'max-xl': { 'raw': '(max-width: 1279px)' }
-      }
+        "small-height": { raw: "(max-height: 800px) and (min-width:640px)" },
+        "max-sm": { raw: "(max-width: 639px)" },
+        "max-md": { raw: "(max-width: 767px)" },
+        "max-lg": { raw: "(max-width: 1023px)" },
+        "max-xl": { raw: "(max-width: 1279px)" },
+      },
     },
 
     colors: {
@@ -28,10 +26,8 @@ export default {
       text_200: "#fff7f7",
       green: "#00ff00",
       bubble_start_color: "#656fdb",
-      bubble_end_color: "#2e394f"
-
+      bubble_end_color: "#2e394f",
     },
-
   },
-  plugins: [require("daisyui")],
-}
+  plugins: [daisyui],
+};

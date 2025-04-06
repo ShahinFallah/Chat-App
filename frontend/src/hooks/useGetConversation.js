@@ -11,7 +11,7 @@ function useGetConversation() {
         const getConversation = async () => {
             setLoading(true)
             try {
-                const res = await fetch(`api/conversation`)
+                const res = await fetch(`${import.meta.env.VITE_BASE_URL}/conversation`)
                 const data = await res.json()
 
                 if (data.error) throw new Error(data.error)

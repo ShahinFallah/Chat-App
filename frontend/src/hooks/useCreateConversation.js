@@ -16,7 +16,7 @@ function useCreateConversation() {
         
         setAddConLoading(true)
         try {
-            const res = await fetch(`/api/conversation/add/${conversation._id}`)
+            const res = await fetch(`${import.meta.env.VITE_BASE_URL}/conversation/add/${conversation._id}`)
 
             const data = await res.json()
 
