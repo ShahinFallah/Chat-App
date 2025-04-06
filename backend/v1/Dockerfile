@@ -9,7 +9,6 @@ RUN bun install --frozen-lockfile --production
 FROM base AS release
 COPY --from=install /usr/src/app/node_modules node_modules
 COPY . .
-COPY ./.env ./.env
 
 ENV NODE_ENV=production
 
