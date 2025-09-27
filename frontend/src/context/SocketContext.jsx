@@ -19,7 +19,8 @@ export const SocketContextProvider = ({ children }) => {
             const socket = io(import.meta.env.VITE_SOCKET_BASE_URL, {
                 query: {
                     userId: userAuth._id
-                }
+                },
+                transports: ["websocket"],
             })
             setSocket(socket)
 
