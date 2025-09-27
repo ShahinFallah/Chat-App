@@ -15,7 +15,7 @@ function useGetConversation() {
         setLoading(true)
         try {
             const res = await axiosInstance.get(`/conversation/search/${value}`)
-            const data = await res.json()
+            const data = res.data
 
             if (data.error) throw new Error(data.error)
 

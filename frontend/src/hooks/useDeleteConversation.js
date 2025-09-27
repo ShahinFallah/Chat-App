@@ -11,7 +11,7 @@ function useDeleteConversation() {
         setLoading(true)
         try {
             const res = await axiosInstance.delete(`/conversation/delete/${id}`)
-            const data = await res.json()
+            const data = res.data
             if (data.error) throw new Error(data.error)
 
             addConversations(conversations.filter(conversation => conversation._id !== id))

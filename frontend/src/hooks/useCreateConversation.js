@@ -24,7 +24,7 @@ function useCreateConversation() {
         `/conversation/add/${conversation._id}`
       );
 
-      const data = await res.json();
+      const data = res.data
 
       if (data.error) throw new Error(data.error);
 

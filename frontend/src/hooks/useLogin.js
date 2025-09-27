@@ -21,7 +21,7 @@ function useLogin() {
         }
       );
 
-      const data = await res.json();
+      const data = res.data
 
       if (data.error) throw new Error(data.error);
 
