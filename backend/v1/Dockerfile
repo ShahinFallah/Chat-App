@@ -3,7 +3,7 @@ WORKDIR /usr/src/app
 
 FROM base AS install
 COPY package.json bun.lockb ./
-RUN bun install --frozen-lockfile --production
+RUN bun install
 
 
 FROM base AS release
@@ -13,5 +13,4 @@ COPY . .
 ENV NODE_ENV=production
 
 USER bun
-EXPOSE 7319
 ENTRYPOINT [ "bun", "run", "app.ts" ]
