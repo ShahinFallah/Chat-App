@@ -9,6 +9,7 @@ const io = new Server(server, {
   cors: {
     origin: process.env.ORIGIN,
   },
+  transports: ["websocket"],
 });
 
 export const getReceiverSocketId = (receiverId: string) => {

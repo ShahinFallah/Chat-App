@@ -6,7 +6,6 @@ import User from "../models/user.model";
 
 export const signup = async (req: Request, res: Response) => {
   try {
-    console.log(req.body);
     const { fullName, username, confirmPassword, password, gender } = req.body;
 
     if (password !== confirmPassword)
@@ -19,7 +18,6 @@ export const signup = async (req: Request, res: Response) => {
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    console.log(hashedPassword);
 
     const user = new User({
       fullName,
@@ -49,11 +47,9 @@ export const signup = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    console.log(req.body);
     const { username, password } = req.body;
 
     const user = await User.findOne({ username });
-    console.log(user);
     const isPassword = await bcrypt.compare(password, user?.password || "");
 
     if (!user || !isPassword)
