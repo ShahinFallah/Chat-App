@@ -1,6 +1,7 @@
 import { useState } from "react"
 import toast from "react-hot-toast"
 import useConversations from "../zustand/useConversations"
+import axiosInstance from "../api/axiosInstance"
 
 function useDeleteConversation() {
     const [loading, setLoading] = useState(false)
@@ -9,9 +10,7 @@ function useDeleteConversation() {
     const deleteConversation = async id => {
         setLoading(true)
         try {
-            const res = await fetch(`${import.meta.env.VITE_BASE_URL}/conversation/delete/${id}`, {
-                method: 'delete'
-            })
+            const res = await axiosInstance.delete(`/conversation/delete/${id}`)
             const data = await res.json()
             if (data.error) throw new Error(data.error)
 

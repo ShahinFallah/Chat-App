@@ -4,6 +4,7 @@ import { useAuthContext } from "../context/AuthContext"
 import useConversations from "../zustand/useConversations"
 import useChatConversationHandler from "../zustand/useChatConversationHandler"
 import useUnreadMessages from "../zustand/unreadMessages"
+import axiosInstance from "../api/axiosInstance"
 
 function useLogout() {
     const [loading, setLoading] = useState(false)
@@ -16,10 +17,7 @@ function useLogout() {
 
         setLoading(true)
         try {
-            const res = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/logout`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
-            })
+            const res = await axiosInstance.post(`/auth/logout`)
             const data = await res.json()
             if (data.error) throw new Error(data.error);
 

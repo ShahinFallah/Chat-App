@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import useConversations from "../zustand/useConversations"
+import axiosInstance from "../api/axiosInstance"
 
 function useGetConversation() {
     const [loading, setLoading] = useState(false)
@@ -11,7 +12,7 @@ function useGetConversation() {
         const getConversation = async () => {
             setLoading(true)
             try {
-                const res = await fetch(`${import.meta.env.VITE_BASE_URL}/conversation`)
+                const res = await axiosInstance.get(`/conversation`)
                 const data = await res.json()
 
                 if (data.error) throw new Error(data.error)

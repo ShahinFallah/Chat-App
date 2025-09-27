@@ -1,6 +1,7 @@
 import { useState } from "react"
 import toast from "react-hot-toast";
 import useAutoComplete from '../zustand/useConversations'
+import axiosInstance from "../api/axiosInstance";
 
 function useGetConversation() {
     const { addAutoCompleteConversation } = useAutoComplete()
@@ -13,7 +14,7 @@ function useGetConversation() {
 
         setLoading(true)
         try {
-            const res = await fetch(`${import.meta.env.VITE_BASE_URL}/conversation/search/${value}`)
+            const res = await axiosInstance.get(`/conversation/search/${value}`)
             const data = await res.json()
 
             if (data.error) throw new Error(data.error)
