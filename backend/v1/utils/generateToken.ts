@@ -7,7 +7,6 @@ const generateTokenAndSetCookie = async (userId: string, res: Response) => {
   });
 
   res.cookie("jwt", token, {
-    path: "/",
     maxAge: 15 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
