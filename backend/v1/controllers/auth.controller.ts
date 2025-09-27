@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import generateTokenAndSetCookie from "../utils/generateToken";
 import type { Request, Response } from "express";
 
@@ -30,13 +30,11 @@ export const signup = async (req: Request, res: Response) => {
       generateTokenAndSetCookie(user._id.toString(), res);
       await user.save();
 
-      res
-        .status(201)
-        .json({
-          _id: user._id,
-          fullName: user.fullName,
-          username: user.username,
-        });
+      res.status(201).json({
+        _id: user._id,
+        fullName: user.fullName,
+        username: user.username,
+      });
     } else {
       res.status(400).json({ error: "invalid user data" });
     }
@@ -60,13 +58,11 @@ export const login = async (req: Request, res: Response) => {
 
     generateTokenAndSetCookie(user._id.toString(), res);
 
-    res
-      .status(200)
-      .json({
-        _id: user._id,
-        fullName: user.fullName,
-        username: user.username,
-      });
+    res.status(200).json({
+      _id: user._id,
+      fullName: user.fullName,
+      username: user.username,
+    });
   } catch (error) {
     console.log("error in login controller", error);
 
