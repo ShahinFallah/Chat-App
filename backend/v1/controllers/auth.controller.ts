@@ -1,105 +1,104 @@
-import bcrypt from 'bcrypt';
-import generateTokenAndSetCookie from '../utils/generateToken';
-import type { Request, Response } from 'express';
+import bcrypt from "bcrypt";
+import generateTokenAndSetCookie from "../utils/generateToken";
+import type { Request, Response } from "express";
 
-import User from '../models/user.model';
+import User from "../models/user.model";
 
+export const signup = async (req: Request, res: Response) => {
+  try {
+    const { fullName, username, confirmPassword, password, gender } = req.body;
 
-export const signup = async (req : Request, res : Response) => {
+    if (password !== confirmPassword)
+      return res.status(400).json({ error: "Password dose not match" });
 
-    try {
-        const { fullName, username, confirmPassword, password, gender } = req.body;
+    const isUserExists = await User.findOne({ username });
 
-        if(password !== confirmPassword) return res.status(400).json({error : 'Password dose not match'});
+    if (isUserExists)
+      return res.status(400).json({ error: "Username already exists" });
 
-        const isUserExists = await User.findOne({username});
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-        if(isUserExists) return res.status(400).json({error : 'Username already exists'});
+    const user = new User({
+      fullName,
+      username,
+      gender,
+      password: hashedPassword,
+    });
 
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+    if (user) {
+      generateTokenAndSetCookie(user._id.toString(), res);
+      await user.save();
 
-        const user = new User({
-            fullName,
-            username,
-            gender,
-            password : hashedPassword
+      res
+        .status(201)
+        .json({
+          _id: user._id,
+          fullName: user.fullName,
+          username: user.username,
         });
-
-        if(user) {
-            generateTokenAndSetCookie(user._id.toString(), res);
-            await user.save();
-
-            res.status(201).json({_id : user._id, fullName : user.fullName, username : user.username});
-
-        }else {
-            res.status(400).json({error : 'invalid user data'});
-        }
-
-    } catch (error) {
-        
-        console.log('error in signup controller', error);
-
-        res.status(500).json({error : 'internal server error'});
+    } else {
+      res.status(400).json({ error: "invalid user data" });
     }
+  } catch (error) {
+    console.log("error in signup controller", error);
 
-}
+    res.status(500).json({ error: "internal server error" });
+  }
+};
 
-export const login = async (req : Request, res : Response) => {
+export const login = async (req: Request, res: Response) => {
+  try {
+    const { username, password } = req.body;
 
-    try {
-        const { username, password } = req.body;
+    const user = await User.findOne({ username });
+    const isPassword = await bcrypt.compare(password, user?.password || "");
 
-        const user = await User.findOne({username});
-        const isPassword = await bcrypt.compare(password, user?.password || '');
+    if (!user || !isPassword)
+      return res.status(400).json({ error: "Invalid username or password" });
+    if (user.isFreeze == true) user.isFreeze = false;
 
-        if(!user || !isPassword) return res.status(400).json({error : 'Invalid username or password'});
-        if(user.isFreeze == true) user.isFreeze = false;
+    generateTokenAndSetCookie(user._id.toString(), res);
 
-        generateTokenAndSetCookie(user._id.toString(), res);
+    res
+      .status(200)
+      .json({
+        _id: user._id,
+        fullName: user.fullName,
+        username: user.username,
+      });
+  } catch (error) {
+    console.log("error in login controller", error);
 
-        res.status(200).json({_id : user._id, fullName : user.fullName, username : user.username});
+    res.status(500).json({ error: "internal server error" });
+  }
+};
 
-    } catch (error) {
-        
-        console.log('error in login controller', error);
+export const logout = async (req: Request, res: Response) => {
+  try {
+    res.cookie("jwt", "", { maxAge: 1 });
+    res.status(200).json({ message: "logged out successfully" });
+  } catch (error) {
+    console.log("error in logout controller", error);
 
-        res.status(500).json({error : 'internal server error'});
-    }
-    
-}
+    res.status(500).json({ error: "internal server error" });
+  }
+};
 
-export const logout = async (req : Request, res : Response) => {
+export const freezeAccount = async (req: Request, res: Response) => {
+  try {
+    res.cookie("jwt", "", { maxAge: 1 });
 
-    try {
-        res.cookie('jwt', '', {maxAge : 1});
-        res.status(200).json({message : 'logged out successfully'});
+    const freeze = await User.findByIdAndUpdate(req.user._id, {
+      isFreeze: true,
+    });
 
-    } catch (error) {
+    await freeze!.save();
 
-        console.log('error in logout controller', error);
+    res.status(200).json({ message: "Account has been freezed" });
+  } catch (error) {
+    console.log("error in freezeAccount controller", error);
 
-        res.status(500).json({error : 'internal server error'});
-    }
-
-}
-
-export const freezeAccount = async (req : Request, res : Response) => {
-
-    try {
-        res.cookie('jwt', '', {maxAge : 1});
-
-        const freeze = await User.findByIdAndUpdate(req.user._id, {isFreeze : true});
-
-        await freeze!.save();
-
-        res.status(200).json({message : 'Account has been freezed'});
-
-    } catch (error) {
-        
-        console.log('error in freezeAccount controller', error);
-        
-        res.status(500).json({error : 'internal server error'});
-    }
-
-}
+    res.status(500).json({ error: "internal server error" });
+  }
+};
